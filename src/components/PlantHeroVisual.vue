@@ -4,10 +4,6 @@ import { onBeforeUnmount, onMounted, ref } from 'vue'
 
 import PixelFarmScene from './PixelFarmScene.vue'
 
-const stage = ref<HTMLElement | null>(null)
-const composition = ref<SVGSVGElement | null>(null)
-let animationContext: gsap.Context | undefined
-
 interface ParallaxLayer {
   setX: gsap.QuickToFunc
   setY: gsap.QuickToFunc
@@ -15,8 +11,17 @@ interface ParallaxLayer {
   strengthY: number
 }
 
+const stage = ref<HTMLElement | null>(null)
+const composition = ref<SVGSVGElement | null>(null)
 const parallaxLayers: ParallaxLayer[] = []
 const parallaxTargets: Element[] = []
+
+let animationContext: gsap.Context | undefined
+let introTimeline: gsap.core.Timeline | undefined
+let pointerQuery: MediaQueryList | undefined
+let motionQuery: MediaQueryList | undefined
+let parallaxAttached = false
+let hasTouchInput = false
 
 function registerParallaxLayer(
   selector: string,
@@ -25,7 +30,10 @@ function registerParallaxLayer(
   duration: number,
 ) {
   if (!stage.value) return
-  const targets = Array.from(stage.value.querySelectorAll<HTMLElement | SVGElement>(selector))
+
+  const targets = Array.from(
+    stage.value.querySelectorAll<HTMLElement | SVGElement>(selector),
+  )
   if (!targets.length) return
 
   parallaxTargets.push(...targets)
@@ -38,15 +46,21 @@ function registerParallaxLayer(
 }
 
 function handlePointerMove(event: PointerEvent) {
-  if (!stage.value || !parallaxLayers.length || window.innerWidth < 768) return
+  if (!stage.value || !parallaxAttached) return
 
   const bounds = stage.value.getBoundingClientRect()
-  const x = ((event.clientX - bounds.left) / bounds.width - 0.5) * 2
-  const y = ((event.clientY - bounds.top) / bounds.height - 0.5) * 2
+  const normalizedX = Math.max(
+    -1,
+    Math.min(1, ((event.clientX - bounds.left) / bounds.width - 0.5) * 2),
+  )
+  const normalizedY = Math.max(
+    -1,
+    Math.min(1, ((event.clientY - bounds.top) / bounds.height - 0.5) * 2),
+  )
 
   parallaxLayers.forEach((layer) => {
-    layer.setX(x * layer.strengthX)
-    layer.setY(y * layer.strengthY)
+    layer.setX(normalizedX * layer.strengthX)
+    layer.setY(normalizedY * layer.strengthY)
   })
 }
 
@@ -57,84 +71,150 @@ function resetParallax() {
   })
 }
 
-onMounted(() => {
-  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
-  const hasFinePointer = window.matchMedia(
-    '(min-width: 768px) and (hover: hover) and (pointer: fine)',
-  ).matches
+function setupParallax() {
+  if (!stage.value || parallaxAttached) return
 
-  if (!reducedMotion && stage.value && composition.value) {
-    animationContext = gsap.context(() => {
-      const stems = Array.from(
-        composition.value?.querySelectorAll<SVGPathElement>('.plant-stem-path') ?? [],
-      )
+  registerParallaxLayer('.hero-sun-parallax', 1.5, 1, 1.35)
+  registerParallaxLayer('.hero-hill-far-parallax', 2.4, 1.5, 1.3)
+  registerParallaxLayer('.hero-hill-near-parallax', 3.2, 2, 1.2)
+  registerParallaxLayer('.hero-cloud-parallax', 4.4, 2.5, 1.15)
+  registerParallaxLayer('.hero-midground-parallax', 5.2, 3.2, 1.05)
+  registerParallaxLayer('.hero-plant-parallax', 6.4, 4, 0.95)
+  registerParallaxLayer('.hero-foreground-parallax', 8, 5.2, 0.88)
+  registerParallaxLayer('.pixel-chicken-parallax', 5, 3.2, 0.96)
 
-      stems.forEach((path) => {
-        const length = path.getTotalLength()
-        gsap.set(path, {
-          strokeDasharray: length,
-          strokeDashoffset: length,
-        })
-      })
+  stage.value.addEventListener('pointermove', handlePointerMove, { passive: true })
+  stage.value.addEventListener('pointerleave', resetParallax)
+  parallaxAttached = true
+}
 
-      const timeline = gsap.timeline({ defaults: { ease: 'power2.out' } })
-      timeline
-        .to(stems, {
-          strokeDashoffset: 0,
-          duration: 1.35,
-          stagger: 0.12,
-        })
-        .from(
-          '.plant-leaf',
-          {
-            autoAlpha: 0,
-            scale: 0.72,
-            duration: 0.65,
-            stagger: 0.12,
-            transformOrigin: 'center center',
-          },
-          '-=0.8',
-        )
-        .from(
-          '.plant-label',
-          {
-            autoAlpha: 0,
-            y: 8,
-            duration: 0.45,
-            stagger: 0.1,
-          },
-          '-=0.35',
-        )
-    }, stage.value)
+function teardownParallax() {
+  if (!stage.value) return
+
+  stage.value.removeEventListener('pointermove', handlePointerMove)
+  stage.value.removeEventListener('pointerleave', resetParallax)
+  if (parallaxTargets.length) {
+    gsap.killTweensOf(parallaxTargets)
+    gsap.set(parallaxTargets, { x: 0, y: 0 })
+  }
+  parallaxLayers.length = 0
+  parallaxTargets.length = 0
+  parallaxAttached = false
+}
+
+function syncInteractionMode() {
+  const reducedMotion = Boolean(motionQuery?.matches)
+  stage.value?.classList.toggle('hero-reduced-motion', reducedMotion)
+
+  if (reducedMotion && introTimeline) {
+    introTimeline.progress(1).pause()
   }
 
-  if (!reducedMotion && hasFinePointer && stage.value) {
-    registerParallaxLayer('.plant-sun, .paper-contour, .pixel-far-layer', 2.2, 1.4, 1.35)
-    registerParallaxLayer('.pixel-cloud-layer', 3.4, 2, 1.2)
-    registerParallaxLayer(
-      '.plant-stems, .plant-base, .pixel-cottage, .pixel-windmill, .pixel-growth-sequence',
-      4.7,
-      3.1,
-      1.05,
+  if (!reducedMotion && pointerQuery?.matches && !hasTouchInput) {
+    setupParallax()
+  } else {
+    teardownParallax()
+  }
+}
+
+function handleVisibilityChange() {
+  if (!stage.value) return
+
+  stage.value.classList.toggle('scene-paused', document.hidden)
+  if (document.hidden) {
+    introTimeline?.pause()
+  } else if (!motionQuery?.matches && introTimeline && introTimeline.progress() < 1) {
+    introTimeline.resume()
+  }
+}
+
+function buildIntroAnimation() {
+  if (!stage.value || !composition.value) return
+
+  animationContext = gsap.context(() => {
+    const stems = Array.from(
+      composition.value?.querySelectorAll<SVGPathElement>('.plant-stem-path') ?? [],
     )
-    registerParallaxLayer('.plant-leaf, .plant-label, .plant-caption, .pixel-garden-sign', 6.2, 4.1, 0.9)
-    stage.value.addEventListener('pointermove', handlePointerMove, { passive: true })
-    stage.value.addEventListener('pointerleave', resetParallax)
-  }
+
+    stems.forEach((path) => {
+      const length = path.getTotalLength()
+      gsap.set(path, {
+        strokeDasharray: length,
+        strokeDashoffset: length,
+      })
+    })
+
+    introTimeline = gsap.timeline({ defaults: { ease: 'power2.out' } })
+    introTimeline
+      .from('.hero-sun-intro', { autoAlpha: 0, scale: 0.94, duration: 0.55 }, 0)
+      .from('.hero-cloud-intro', { autoAlpha: 0, x: -8, duration: 0.5 }, 0.08)
+      .from(
+        '.hero-hill-intro',
+        { autoAlpha: 0, y: 8, duration: 0.5, stagger: 0.08 },
+        0.12,
+      )
+      .from('.hero-ground-intro', { autoAlpha: 0, y: 10, duration: 0.45 }, 0.2)
+      .to(
+        stems,
+        { strokeDashoffset: 0, duration: 1.1, stagger: 0.08, ease: 'power1.inOut' },
+        0.34,
+      )
+      .from(
+        '.plant-leaf',
+        {
+          autoAlpha: 0,
+          scale: 0.7,
+          duration: 0.55,
+          stagger: 0.1,
+          transformOrigin: 'center center',
+        },
+        0.82,
+      )
+      .from(
+        '.plant-label',
+        { autoAlpha: 0, y: 7, duration: 0.38, stagger: 0.09 },
+        1.28,
+      )
+      .from(
+        '.plant-bud',
+        { autoAlpha: 0, scale: 0.55, duration: 0.42, transformOrigin: 'center bottom' },
+        1.62,
+      )
+  }, stage.value)
+}
+
+onMounted(() => {
+  if (!stage.value || !composition.value) return
+
+  hasTouchInput = navigator.maxTouchPoints > 0
+  motionQuery = window.matchMedia('(prefers-reduced-motion: reduce)')
+  pointerQuery = window.matchMedia(
+    '(min-width: 768px) and (hover: hover) and (pointer: fine)',
+  )
+
+  if (!motionQuery.matches) buildIntroAnimation()
+  syncInteractionMode()
+  handleVisibilityChange()
+
+  pointerQuery.addEventListener('change', syncInteractionMode)
+  motionQuery.addEventListener('change', syncInteractionMode)
+  document.addEventListener('visibilitychange', handleVisibilityChange)
 })
 
 onBeforeUnmount(() => {
-  stage.value?.removeEventListener('pointermove', handlePointerMove)
-  stage.value?.removeEventListener('pointerleave', resetParallax)
-  gsap.killTweensOf(parallaxTargets)
-  parallaxLayers.length = 0
-  parallaxTargets.length = 0
+  teardownParallax()
+  pointerQuery?.removeEventListener('change', syncInteractionMode)
+  motionQuery?.removeEventListener('change', syncInteractionMode)
+  document.removeEventListener('visibilitychange', handleVisibilityChange)
+  introTimeline?.kill()
   animationContext?.revert()
 })
 </script>
 
 <template>
   <div ref="stage" class="plant-hero-stage">
+    <PixelFarmScene />
+
     <svg
       ref="composition"
       class="plant-hero-art"
@@ -142,79 +222,71 @@ onBeforeUnmount(() => {
       role="img"
       aria-labelledby="plant-hero-title plant-hero-description"
     >
-      <title id="plant-hero-title">A growing digital plant</title>
+      <title id="plant-hero-title">A growing plant in a modern digital garden</title>
       <desc id="plant-hero-description">
-        An original illustration with leaves labeled Build, Learn, and Explore.
+        An original natural illustration with soft hills, a windmill, pixel soil, a tiny
+        chicken, and leaves labeled Build, Learn, and Explore.
       </desc>
 
-      <circle class="plant-sun" cx="300" cy="260" r="214" />
-      <path class="paper-contour contour-one" d="M72 410C132 350 155 296 139 225" />
-      <path class="paper-contour contour-two" d="M434 91C481 157 494 223 478 288" />
-      <path class="paper-contour contour-three" d="M83 477C173 522 374 551 484 468" />
+      <g class="hero-plant-parallax">
+        <g class="plant-stems">
+          <path class="plant-stem-path stem-main" d="M299 523C290 456 307 406 294 346C281 290 292 229 307 168C314 133 318 105 315 78" />
+          <path class="plant-stem-path stem-build" d="M295 360C251 342 218 317 190 278" />
+          <path class="plant-stem-path stem-learn" d="M300 286C345 269 378 243 401 208" />
+          <path class="plant-stem-path stem-explore" d="M306 198C272 177 249 153 235 119" />
+          <path class="plant-stem-path stem-tip" d="M315 81C337 75 351 61 359 43" />
+        </g>
 
-      <g class="plant-base">
-        <path class="book-page page-back" d="M151 526C214 510 267 517 297 542V579C256 559 207 557 151 571Z" />
-        <path class="book-page page-front" d="M297 542C337 516 395 510 452 526V571C400 556 348 558 297 579Z" />
-        <path class="book-spine" d="M297 541V579" />
-        <path class="pot-rim-svg" d="M232 486H364L352 514H244Z" />
-        <path class="pot-body-svg" d="M250 512H347L333 558H265Z" />
-        <ellipse class="pot-soil-svg" cx="298" cy="493" rx="61" ry="12" />
-        <text class="plant-b" x="298" y="539" text-anchor="middle">b</text>
-      </g>
+        <g class="plant-leaf leaf-build">
+          <path class="leaf-shape leaf-sage" d="M195 281C149 281 122 251 122 208C164 204 200 227 209 264C210 273 205 279 195 281Z" />
+          <path class="leaf-vein" d="M200 271C178 251 154 231 133 215" />
+          <path class="leaf-vein leaf-vein-small" d="M176 249L176 225M158 235L148 254" />
+        </g>
 
-      <g class="plant-stems">
-        <path class="plant-stem-path stem-main" d="M298 491C286 427 309 374 292 321C276 271 290 215 306 157C314 127 317 104 314 81" />
-        <path class="plant-stem-path stem-build" d="M293 328C252 302 216 267 194 225" />
-        <path class="plant-stem-path stem-learn" d="M300 262C344 243 381 207 401 169" />
-        <path class="plant-stem-path stem-explore" d="M304 178C271 156 244 127 230 95" />
-        <path class="plant-stem-path stem-tip" d="M314 82C340 72 357 53 365 31" />
-      </g>
+        <g class="plant-leaf leaf-learn">
+          <path class="leaf-shape leaf-lake" d="M397 210C414 164 450 148 490 161C485 201 457 229 416 228C407 227 400 221 397 210Z" />
+          <path class="leaf-vein" d="M407 217C437 200 459 183 479 168" />
+          <path class="leaf-vein leaf-vein-small" d="M436 200L432 176M456 185L464 204" />
+        </g>
 
-      <g class="plant-leaf leaf-build">
-        <path class="leaf-shape leaf-sage" d="M198 226C152 224 126 194 126 151C166 147 203 169 212 207C213 215 208 222 198 226Z" />
-        <path class="leaf-vein" d="M202 216C179 195 158 177 136 160" />
-        <path class="leaf-vein leaf-vein-small" d="M178 194L178 169M161 180L151 200" />
-      </g>
+        <g class="plant-leaf leaf-explore">
+          <path class="leaf-shape leaf-warm" d="M238 122C201 115 181 88 186 53C223 54 251 75 254 106C253 114 247 120 238 122Z" />
+          <path class="leaf-vein" d="M244 113C226 95 210 78 194 62" />
+          <path class="leaf-vein leaf-vein-small" d="M224 93L223 70M209 78L201 95" />
+        </g>
 
-      <g class="plant-leaf leaf-learn">
-        <path class="leaf-shape leaf-lake" d="M397 170C413 124 449 107 489 120C484 160 456 188 415 188C406 187 400 181 397 170Z" />
-        <path class="leaf-vein" d="M407 177C436 160 458 143 478 128" />
-        <path class="leaf-vein leaf-vein-small" d="M435 160L431 136M455 146L463 164" />
-      </g>
+        <g class="plant-leaf leaf-tip">
+          <path class="leaf-shape leaf-light" d="M358 45C360 16 380 1 405 5C406 31 391 51 368 55C362 54 359 51 358 45Z" />
+          <path class="leaf-vein" d="M365 48C378 34 389 22 398 12" />
+        </g>
 
-      <g class="plant-leaf leaf-explore">
-        <path class="leaf-shape leaf-warm" d="M233 97C196 90 177 63 182 28C219 29 247 50 250 81C249 89 243 95 233 97Z" />
-        <path class="leaf-vein" d="M239 88C221 70 205 53 190 37" />
-        <path class="leaf-vein leaf-vein-small" d="M219 68L218 45M204 53L196 70" />
-      </g>
+        <g class="plant-bud">
+          <path class="bud-stem" d="M315 79C316 65 315 54 314 45" />
+          <path class="bud-calyx" d="M314 52C301 49 296 40 299 31C309 33 315 41 314 52Z" />
+          <path class="bud-petal" d="M314 45C307 31 313 18 324 13C331 26 327 39 314 45Z" />
+        </g>
 
-      <g class="plant-leaf leaf-tip">
-        <path class="leaf-shape leaf-light" d="M364 33C366 4 386 -11 411 -7C412 19 397 39 374 43C368 42 365 39 364 33Z" />
-        <path class="leaf-vein" d="M371 36C384 22 395 10 404 0" />
-      </g>
+        <g class="plant-label label-build-plant">
+          <rect x="71" y="302" width="92" height="34" rx="17" />
+          <circle cx="89" cy="319" r="4" />
+          <text x="101" y="324">Build</text>
+        </g>
+        <g class="plant-label label-learn-plant">
+          <rect x="402" y="247" width="94" height="34" rx="17" />
+          <circle cx="420" cy="264" r="4" />
+          <text x="432" y="269">Learn</text>
+        </g>
+        <g class="plant-label label-explore-plant">
+          <rect x="108" y="134" width="108" height="34" rx="17" />
+          <circle cx="126" cy="151" r="4" />
+          <text x="138" y="156">Explore</text>
+        </g>
 
-      <g class="plant-label label-build-plant">
-        <rect x="82" y="244" width="92" height="34" rx="17" />
-        <circle cx="100" cy="261" r="4" />
-        <text x="112" y="266">Build</text>
-      </g>
-      <g class="plant-label label-learn-plant">
-        <rect x="403" y="202" width="94" height="34" rx="17" />
-        <circle cx="421" cy="219" r="4" />
-        <text x="433" y="224">Learn</text>
-      </g>
-      <g class="plant-label label-explore-plant">
-        <rect x="121" y="102" width="108" height="34" rx="17" />
-        <circle cx="139" cy="119" r="4" />
-        <text x="151" y="124">Explore</text>
-      </g>
-
-      <g class="plant-caption">
-        <path d="M398 470H476" />
-        <text x="398" y="460">a work in progress</text>
+        <g class="plant-caption">
+          <path d="M382 455H479" />
+          <text x="382" y="445">a work in progress</text>
+        </g>
       </g>
     </svg>
-
-    <PixelFarmScene />
   </div>
 </template>

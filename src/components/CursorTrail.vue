@@ -21,6 +21,12 @@ interface Particle {
 const canvas = ref<HTMLCanvasElement | null>(null)
 const particles: Particle[] = []
 const MAX_PARTICLES = 120
+const MAX_PIXEL_RATIO = 2
+const MAX_FRAME_DELTA = 1.8
+const MIN_TRAIL_DISTANCE = 7
+const MIN_SPAWN_INTERVAL_MS = 24
+const FLOWER_PETAL_COUNT = 8
+const PARTICLE_SCALE_DECAY = 0.006
 const STAR_COLORS = ['#d3ad61', '#e1c985', '#c7984f']
 const NATURE_COLORS = ['#879d76', '#a5b991', '#b68a65']
 const PETAL_COLORS = ['#e2b789', '#d7a471', '#f0d2a5', '#c99b73']
@@ -33,6 +39,7 @@ let lastPointerY = 0
 let lastSpawnTime = 0
 let trailStep = 0
 let enabled = false
+let hasTouchInput = false
 let runtimeListenersAttached = false
 let pointerQuery: MediaQueryList | undefined
 let motionQuery: MediaQueryList | undefined
@@ -49,12 +56,13 @@ function addParticle(particle: Particle) {
 function resizeCanvas() {
   if (!canvas.value || !context) return
 
-  const pixelRatio = Math.min(window.devicePixelRatio || 1, 2)
+  const pixelRatio = Math.min(window.devicePixelRatio || 1, MAX_PIXEL_RATIO)
   canvas.value.width = Math.round(window.innerWidth * pixelRatio)
   canvas.value.height = Math.round(window.innerHeight * pixelRatio)
   context.setTransform(pixelRatio, 0, 0, pixelRatio, 0, 0)
 }
 
+// Demand-driven rendering keeps RAF dormant whenever no particles are alive.
 function requestDraw() {
   if (!enabled || document.hidden || animationFrame) return
   lastFrameTime = performance.now()
@@ -132,7 +140,7 @@ function drawFrame(time: number) {
   animationFrame = 0
   if (!enabled || document.hidden || !context) return
 
-  const delta = Math.min((time - lastFrameTime) / 16.67, 1.8)
+  const delta = Math.min((time - lastFrameTime) / 16.67, MAX_FRAME_DELTA)
   lastFrameTime = time
   context.clearRect(0, 0, window.innerWidth, window.innerHeight)
 
@@ -143,7 +151,7 @@ function drawFrame(time: number) {
     particle.velocityY += particle.gravity * delta
     particle.rotation += particle.rotationSpeed * delta
     particle.life -= particle.decay * delta
-    particle.size *= 1 - 0.006 * delta
+    particle.size *= 1 - PARTICLE_SCALE_DECAY * delta
 
     if (particle.life <= 0 || particle.size < 0.55) {
       particles.splice(index, 1)
@@ -156,12 +164,12 @@ function drawFrame(time: number) {
   if (particles.length) animationFrame = window.requestAnimationFrame(drawFrame)
 }
 
-function spawnTrail(event: PointerEvent) {
+function spawnTrail(event: MouseEvent) {
   if (!enabled || document.hidden) return
 
   const now = performance.now()
   const distance = Math.hypot(event.clientX - lastPointerX, event.clientY - lastPointerY)
-  if (distance < 7 || now - lastSpawnTime < 24) return
+  if (distance < MIN_TRAIL_DISTANCE || now - lastSpawnTime < MIN_SPAWN_INTERVAL_MS) return
 
   lastPointerX = event.clientX
   lastPointerY = event.clientY
@@ -193,12 +201,11 @@ function spawnTrail(event: PointerEvent) {
   requestDraw()
 }
 
-function spawnBloom(event: PointerEvent) {
+function spawnBloom(event: MouseEvent) {
   if (!enabled || document.hidden) return
 
-  const petalCount = 8
-  for (let index = 0; index < petalCount; index += 1) {
-    const angle = (Math.PI * 2 * index) / petalCount
+  for (let index = 0; index < FLOWER_PETAL_COUNT; index += 1) {
+    const angle = (Math.PI * 2 * index) / FLOWER_PETAL_COUNT
     const speed = 0.75 + Math.random() * 0.45
     addParticle({
       x: event.clientX,
@@ -241,11 +248,12 @@ function stopAnimation() {
   context?.clearRect(0, 0, window.innerWidth, window.innerHeight)
 }
 
+// Runtime listeners exist only while every desktop capability gate is satisfied.
 function attachRuntimeListeners() {
   if (runtimeListenersAttached) return
   runtimeListenersAttached = true
-  window.addEventListener('pointermove', spawnTrail, { passive: true })
-  window.addEventListener('pointerdown', spawnBloom, { passive: true })
+  window.addEventListener('mousemove', spawnTrail, { passive: true })
+  window.addEventListener('click', spawnBloom, { passive: true })
   window.addEventListener('resize', resizeCanvas, { passive: true })
   document.addEventListener('visibilitychange', handleVisibilityChange)
 }
@@ -253,14 +261,16 @@ function attachRuntimeListeners() {
 function detachRuntimeListeners() {
   if (!runtimeListenersAttached) return
   runtimeListenersAttached = false
-  window.removeEventListener('pointermove', spawnTrail)
-  window.removeEventListener('pointerdown', spawnBloom)
+  window.removeEventListener('mousemove', spawnTrail)
+  window.removeEventListener('click', spawnBloom)
   window.removeEventListener('resize', resizeCanvas)
   document.removeEventListener('visibilitychange', handleVisibilityChange)
 }
 
 function syncEnabledState() {
-  enabled = Boolean(pointerQuery?.matches && !motionQuery?.matches)
+  enabled = Boolean(
+    context && pointerQuery?.matches && !motionQuery?.matches && !hasTouchInput,
+  )
   if (canvas.value) canvas.value.hidden = !enabled
   if (enabled) {
     attachRuntimeListeners()
@@ -285,6 +295,12 @@ onMounted(() => {
   if (!canvas.value) return
 
   context = canvas.value.getContext('2d', { alpha: true })
+  if (!context) {
+    canvas.value.hidden = true
+    return
+  }
+
+  hasTouchInput = navigator.maxTouchPoints > 0
   pointerQuery = window.matchMedia('(hover: hover) and (pointer: fine)')
   motionQuery = window.matchMedia('(prefers-reduced-motion: reduce)')
 
@@ -294,6 +310,7 @@ onMounted(() => {
 })
 
 onBeforeUnmount(() => {
+  // Release every browser resource so remounting cannot duplicate the effect.
   detachRuntimeListeners()
   stopAnimation()
   pointerQuery?.removeEventListener('change', syncEnabledState)

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Clock3 } from 'lucide-vue-next'
+import { Clock3, ExternalLink } from 'lucide-vue-next'
 import { onBeforeUnmount, onMounted, ref } from 'vue'
 
 import type { Project } from '@/data/projects'
@@ -93,7 +93,18 @@ onBeforeUnmount(() => {
       </ul>
     </div>
 
-    <div class="project-status" aria-label="Project details coming soon">
+    <a
+      v-if="project.url"
+      class="project-status project-status-link"
+      :href="project.url"
+      target="_blank"
+      rel="noreferrer"
+      :aria-label="`View ${project.title} project (opens in a new tab)`"
+    >
+      <ExternalLink :size="15" aria-hidden="true" />
+      View project
+    </a>
+    <div v-else class="project-status" aria-label="Project details coming soon">
       <Clock3 :size="15" aria-hidden="true" />
       Details coming soon
     </div>

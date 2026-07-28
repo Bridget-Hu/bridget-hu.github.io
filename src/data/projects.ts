@@ -8,6 +8,7 @@ export interface Project {
   role: string
   description: string
   technologies: string[]
+  url?: string
   visual: ProjectVisual
   tone: ProjectTone
 }
@@ -32,6 +33,7 @@ export const projects: Project[] = [
     description:
       'An intelligent interview practice platform covering interview workflows, evaluation, and desktop application delivery.',
     technologies: ['Vue 3', 'FastAPI', 'Electron', 'SQLite'],
+    url: 'https://aiiv.zszs.uno/',
     visual: 'dialogue',
     tone: 'lake',
   },

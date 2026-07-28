@@ -1760,3 +1760,567 @@ button.pixel-decor-item:focus-visible {
     transition: none;
   }
 }
+
+/* Hero v3: modern landscape layers with restrained original pixel-farm details. */
+.plant-hero-stage {
+  isolation: isolate;
+  overflow: visible;
+}
+
+.hero-farm-landscape,
+.hero-landscape-art,
+.hero-foreground-art,
+.plant-hero-art {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.hero-farm-landscape {
+  pointer-events: none;
+}
+
+.hero-landscape-art {
+  z-index: 0;
+  overflow: visible;
+}
+
+.plant-hero-art {
+  z-index: 2;
+  overflow: visible;
+  pointer-events: none;
+}
+
+.hero-foreground-art {
+  z-index: 3;
+  overflow: visible;
+  pointer-events: none;
+}
+
+.hero-scene-sky {
+  fill: color-mix(in srgb, var(--paper) 64%, var(--sage-soft));
+  stroke: color-mix(in srgb, var(--sage) 10%, transparent);
+  stroke-width: 1px;
+}
+
+.hero-sun-halo {
+  fill: color-mix(in srgb, var(--farm-window) 18%, transparent);
+}
+
+.hero-sun-core {
+  fill: color-mix(in srgb, var(--farm-window) 76%, var(--paper));
+}
+
+.hero-sun-texture {
+  fill: none;
+  opacity: 0.32;
+  stroke: var(--clay);
+  stroke-linecap: round;
+  stroke-width: 2px;
+}
+
+.hero-cloud {
+  fill: color-mix(in srgb, var(--paper) 88%, var(--lake));
+  opacity: 0.88;
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: hero-modern-cloud-drift 22s ease-in-out infinite alternate;
+}
+
+.cloud-two-modern {
+  opacity: 0.72;
+  animation-duration: 27s;
+  animation-delay: -7s;
+}
+
+.cloud-three-modern {
+  opacity: 0.62;
+  animation-duration: 31s;
+  animation-delay: -14s;
+}
+
+.hero-hill {
+  stroke: color-mix(in srgb, var(--forest) 7%, transparent);
+  stroke-width: 1px;
+}
+
+.hero-hill-far {
+  fill: color-mix(in srgb, var(--farm-hill-back) 32%, var(--paper));
+}
+
+.hero-hill-middle {
+  fill: color-mix(in srgb, var(--farm-hill-back) 52%, var(--paper));
+}
+
+.hero-hill-near {
+  fill: color-mix(in srgb, var(--farm-hill-front) 68%, var(--sage-soft));
+}
+
+.hero-windmill-tower {
+  fill: #d3b47f;
+  stroke: #795d45;
+  stroke-linejoin: round;
+  stroke-width: 2px;
+}
+
+.hero-windmill-door {
+  fill: #87674d;
+}
+
+.hero-windmill-blades {
+  fill: #ead7ac;
+  stroke: #806149;
+  stroke-linejoin: round;
+  stroke-width: 1.5px;
+  animation: hero-modern-windmill-turn 20s linear infinite;
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+.hero-windmill-hub {
+  fill: #a67450;
+  stroke: #75523d;
+  stroke-width: 1.5px;
+}
+
+.hero-meadow {
+  fill: color-mix(in srgb, var(--farm-hill-front) 74%, var(--sage-soft));
+}
+
+.hero-soil-top {
+  fill: #b58b65;
+}
+
+.hero-soil-middle {
+  fill: #95694f;
+}
+
+.hero-soil-deep {
+  fill: #79523f;
+}
+
+.hero-soil-pixels {
+  fill: #c19a72;
+  opacity: 0.52;
+}
+
+.hero-grass-tuft {
+  fill: #5f7d58;
+}
+
+.tuft-two {
+  fill: #75916a;
+}
+
+.tuft-three {
+  fill: #6c865f;
+}
+
+.flower-stem {
+  fill: #5f7d58;
+}
+
+.flower-petal {
+  fill: #f0d7c1;
+}
+
+.flower-petal-warm {
+  fill: #e4b991;
+}
+
+.flower-center {
+  fill: #d6ae63;
+}
+
+.hero-small-stone {
+  fill: #9ca096;
+}
+
+.watering-body,
+.watering-top,
+.watering-spout {
+  fill: #8da8a0;
+  stroke: #5f756f;
+  stroke-linejoin: round;
+  stroke-width: 1.5px;
+}
+
+.watering-handle {
+  fill: none;
+  stroke: #5f756f;
+  stroke-linecap: round;
+  stroke-width: 3px;
+}
+
+.plant-stem-path {
+  vector-effect: non-scaling-stroke;
+}
+
+.plant-bud {
+  transform-box: fill-box;
+  transform-origin: center bottom;
+}
+
+.bud-stem {
+  fill: none;
+  stroke: var(--forest);
+  stroke-linecap: round;
+  stroke-width: 2.6px;
+}
+
+.bud-calyx {
+  fill: var(--sage);
+  stroke: var(--forest);
+  stroke-width: 1.4px;
+}
+
+.bud-petal {
+  fill: color-mix(in srgb, var(--clay) 62%, var(--paper));
+  stroke: var(--forest);
+  stroke-width: 1.4px;
+}
+
+.pixel-chicken-parallax {
+  position: absolute;
+  z-index: 5;
+  bottom: 8%;
+  left: 64%;
+  width: 44px;
+  height: 44px;
+  pointer-events: none;
+}
+
+.pixel-chicken {
+  --chick-step: 0px;
+  position: relative;
+  width: 44px;
+  min-width: 44px;
+  height: 44px;
+  min-height: 44px;
+  padding: 0;
+  border: 0;
+  border-radius: 5px;
+  color: inherit;
+  background: transparent;
+  cursor: pointer;
+  image-rendering: pixelated;
+  pointer-events: auto;
+  transform: translateX(var(--chick-step));
+  transition: transform 420ms steps(3, end);
+}
+
+.pixel-chicken-sprite {
+  position: absolute;
+  inset: 4px;
+  display: block;
+  animation: hero-modern-chick-idle 7.6s ease-in-out 2.4s infinite;
+  transform-origin: center bottom;
+}
+
+.pixel-chicken-sprite i {
+  position: absolute;
+  display: block;
+  pointer-events: none;
+}
+
+.pixel-chicken-body {
+  right: 1px;
+  bottom: 6px;
+  width: 25px;
+  height: 17px;
+  background: #d9b460;
+  box-shadow:
+    -4px 4px #d9b460,
+    4px 0 #d9b460;
+}
+
+.pixel-chicken-wing {
+  right: 5px;
+  bottom: 10px;
+  width: 10px;
+  height: 8px;
+  background: #c99d4f;
+  box-shadow: 3px 2px #c99d4f;
+}
+
+.pixel-chicken-head {
+  top: 3px;
+  left: 3px;
+  width: 19px;
+  height: 18px;
+  background: #e5c572;
+  box-shadow:
+    4px -3px #e5c572,
+    4px 3px #e5c572;
+}
+
+.pixel-chicken-eye {
+  top: 9px;
+  left: 16px;
+  width: 3px;
+  height: 3px;
+  background: #3f423b;
+  animation: hero-modern-chick-blink 5.8s steps(1, end) infinite;
+}
+
+.pixel-chicken-beak {
+  top: 13px;
+  left: 0;
+  width: 6px;
+  height: 4px;
+  background: #b8794f;
+}
+
+.pixel-chicken-leg {
+  bottom: 0;
+  width: 3px;
+  height: 7px;
+  background: #9f6d48;
+}
+
+.pixel-chicken-leg.leg-left {
+  left: 17px;
+}
+
+.pixel-chicken-leg.leg-right {
+  right: 5px;
+}
+
+.pixel-chicken:hover .pixel-chicken-sprite {
+  animation-play-state: paused;
+  transform: translateY(-2px) rotate(-1deg);
+}
+
+.pixel-chicken:focus-visible {
+  outline: 3px solid var(--clay);
+  outline-offset: 3px;
+}
+
+.chicken-dream-message {
+  position: absolute;
+  z-index: 6;
+  bottom: 33px;
+  left: 36px;
+  display: inline-flex;
+  min-height: 28px;
+  padding: 6px 9px;
+  border: 1px solid var(--line-strong);
+  border-radius: 5px;
+  align-items: center;
+  gap: 5px;
+  color: var(--forest);
+  background: color-mix(in srgb, var(--paper) 96%, transparent);
+  box-shadow: 0 8px 18px rgba(63, 89, 69, 0.12);
+  font-family: var(--serif);
+  font-size: 9px;
+  font-style: italic;
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+.chicken-dream-message b {
+  color: var(--heart-accent);
+  font-size: 12px;
+  font-style: normal;
+}
+
+.chicken-dream-enter-active,
+.chicken-dream-leave-active {
+  transition:
+    opacity 200ms ease,
+    transform 200ms ease;
+}
+
+.chicken-dream-enter-from,
+.chicken-dream-leave-to {
+  opacity: 0;
+  transform: translateY(4px) scale(0.96);
+}
+
+html.garden-motion .hero-copy-item {
+  animation: hero-copy-arrive 580ms cubic-bezier(0.2, 0.72, 0.2, 1) both;
+}
+
+html.garden-motion .copy-step-one {
+  animation-delay: 70ms;
+}
+
+html.garden-motion .copy-step-two {
+  animation-delay: 140ms;
+}
+
+html.garden-motion .copy-step-three {
+  animation-delay: 210ms;
+}
+
+html.garden-motion .copy-step-four {
+  animation-delay: 280ms;
+}
+
+html.garden-motion .copy-step-five {
+  animation-delay: 350ms;
+}
+
+html.garden-motion .copy-step-six {
+  animation-delay: 420ms;
+}
+
+.plant-hero-stage.scene-paused .hero-cloud,
+.plant-hero-stage.scene-paused .hero-windmill-blades,
+.plant-hero-stage.scene-paused .leaf-shape,
+.plant-hero-stage.scene-paused .pixel-chicken-sprite,
+.plant-hero-stage.scene-paused .pixel-chicken-eye {
+  animation-play-state: paused !important;
+}
+
+@keyframes hero-copy-arrive {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes hero-modern-cloud-drift {
+  to {
+    transform: translateX(9px);
+  }
+}
+
+@keyframes hero-modern-windmill-turn {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes hero-modern-chick-idle {
+  0%,
+  84%,
+  100% {
+    transform: translateY(0);
+  }
+
+  89%,
+  94% {
+    transform: translateY(-2px);
+  }
+}
+
+@keyframes hero-modern-chick-blink {
+  0%,
+  90%,
+  94%,
+  100% {
+    transform: scaleY(1);
+  }
+
+  91%,
+  93% {
+    transform: scaleY(0.15);
+  }
+}
+
+@media (hover: hover) and (pointer: fine) and (min-width: 768px) {
+  .hero-sun-parallax,
+  .hero-hill-far-parallax,
+  .hero-hill-near-parallax,
+  .hero-cloud-parallax,
+  .hero-midground-parallax,
+  .hero-plant-parallax,
+  .hero-foreground-parallax,
+  .pixel-chicken-parallax {
+    will-change: transform;
+  }
+}
+
+@media (max-width: 899px) {
+  .cloud-three-modern {
+    display: none;
+  }
+
+  .hero-sun-halo {
+    opacity: 0.72;
+  }
+}
+
+@media (max-width: 767px) {
+  .hero-sun-texture,
+  .cloud-two-modern,
+  .hero-watering-can {
+    display: none;
+  }
+
+  .hero-cloud,
+  .hero-windmill-blades,
+  .leaf-shape,
+  .pixel-chicken-sprite,
+  .pixel-chicken-eye {
+    animation: none !important;
+  }
+
+  .pixel-chicken {
+    transform: none !important;
+    transition: none;
+  }
+
+  .pixel-chicken-parallax {
+    bottom: 7%;
+    left: 63%;
+  }
+}
+
+@media (max-width: 520px) {
+  .hero-hill-far-parallax {
+    opacity: 0.72;
+  }
+
+  .flower-two,
+  .tuft-three {
+    display: none;
+  }
+
+  .plant-label text {
+    font-size: 15px;
+  }
+
+  .chicken-dream-message {
+    right: -6px;
+    bottom: 39px;
+    left: auto;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html.garden-motion .hero-copy-item,
+  .hero-cloud,
+  .hero-windmill-blades,
+  .leaf-shape,
+  .pixel-chicken-sprite,
+  .pixel-chicken-eye {
+    animation: none !important;
+  }
+
+  .hero-copy-item,
+  .hero-sun-parallax,
+  .hero-hill-far-parallax,
+  .hero-hill-near-parallax,
+  .hero-cloud-parallax,
+  .hero-midground-parallax,
+  .hero-plant-parallax,
+  .hero-foreground-parallax,
+  .pixel-chicken-parallax,
+  .pixel-chicken {
+    opacity: 1;
+    transform: none !important;
+  }
+
+  .plant-stem-path {
+    stroke-dasharray: none !important;
+    stroke-dashoffset: 0 !important;
+  }
+}

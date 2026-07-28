@@ -314,6 +314,7 @@ svg {
   content: "";
   background: var(--sage);
   transform: scaleX(0);
+  transform-origin: left center;
   transition: transform 160ms ease;
 }
 
@@ -322,6 +323,8 @@ svg {
   color: var(--forest);
 }
 
+.desktop-nav a:hover::after,
+.desktop-nav a:focus-visible::after,
 .desktop-nav a.active::after {
   transform: scaleX(1);
 }
@@ -337,6 +340,24 @@ svg {
   color: var(--forest);
   background: var(--paper);
   cursor: pointer;
+  transition:
+    color 180ms ease,
+    border-color 180ms ease,
+    background-color 180ms ease,
+    transform 180ms ease,
+    box-shadow 180ms ease;
+}
+
+.icon-button:hover {
+  border-color: var(--sage);
+  background: var(--sage-soft);
+  box-shadow: 0 7px 16px rgba(63, 89, 69, 0.1);
+  transform: translateY(-1px);
+}
+
+.icon-button:active {
+  box-shadow: 0 3px 9px rgba(63, 89, 69, 0.08);
+  transform: translateY(0);
 }
 
 .mobile-menu-button,
@@ -479,6 +500,10 @@ svg {
 
 .button:hover {
   transform: translateY(-2px);
+}
+
+.button:active {
+  transform: translateY(0);
 }
 
 .button-primary {
@@ -1182,6 +1207,17 @@ svg {
   color: var(--text-subtle);
   font-size: 12px;
   font-weight: 650;
+}
+
+.project-status-link {
+  transition:
+    color 180ms ease,
+    border-color 180ms ease;
+}
+
+.project-status-link:hover {
+  border-color: color-mix(in srgb, var(--project-accent) 34%, transparent);
+  color: var(--project-accent);
 }
 
 /* How I Grow */
@@ -2652,6 +2688,9 @@ svg {
   .project-card:hover,
   .project-card:focus-visible,
   .button:hover,
+  .button:active,
+  .icon-button:hover,
+  .icon-button:active,
   .interest-note:hover {
     transform: none;
   }
