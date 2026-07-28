@@ -30,8 +30,8 @@ function handlePointerMove(event: PointerEvent) {
     const bounds = card.value.getBoundingClientRect()
     const relativeX = Math.min(1, Math.max(0, (event.clientX - bounds.left) / bounds.width))
     const relativeY = Math.min(1, Math.max(0, (event.clientY - bounds.top) / bounds.height))
-    const rotateX = (0.5 - relativeY) * 2.8
-    const rotateY = (relativeX - 0.5) * 3.8
+    const rotateX = (0.5 - relativeY) * 1.8
+    const rotateY = (relativeX - 0.5) * 2.4
 
     card.value.style.setProperty('--card-rotate-x', `${rotateX.toFixed(2)}deg`)
     card.value.style.setProperty('--card-rotate-y', `${rotateY.toFixed(2)}deg`)

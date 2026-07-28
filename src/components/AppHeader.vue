@@ -2,6 +2,8 @@
 import { Menu, X } from 'lucide-vue-next'
 import { nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 
+import ThemeToggle from './ThemeToggle.vue'
+
 const navItems = [
   { label: 'Home', href: '#home', id: 'home' },
   { label: 'About', href: '#about', id: 'about' },
@@ -95,30 +97,34 @@ onBeforeUnmount(() => {
         </span>
       </a>
 
-      <div class="desktop-nav">
-        <a
-          v-for="item in navItems"
-          :key="item.id"
-          :href="item.href"
-          :class="{ active: activeSection === item.id }"
-          :aria-current="activeSection === item.id ? 'location' : undefined"
-        >
-          {{ item.label }}
-        </a>
-      </div>
+      <div class="header-actions">
+        <div class="desktop-nav">
+          <a
+            v-for="item in navItems"
+            :key="item.id"
+            :href="item.href"
+            :class="{ active: activeSection === item.id }"
+            :aria-current="activeSection === item.id ? 'location' : undefined"
+          >
+            {{ item.label }}
+          </a>
+        </div>
 
-      <button
-        ref="menuButton"
-        class="mobile-menu-button icon-button"
-        type="button"
-        :aria-expanded="menuOpen"
-        aria-controls="mobile-navigation"
-        :aria-label="menuOpen ? 'Close navigation menu' : 'Open navigation menu'"
-        @click="menuOpen = !menuOpen"
-      >
-        <X v-if="menuOpen" :size="22" aria-hidden="true" />
-        <Menu v-else :size="22" aria-hidden="true" />
-      </button>
+        <ThemeToggle />
+
+        <button
+          ref="menuButton"
+          class="mobile-menu-button icon-button"
+          type="button"
+          :aria-expanded="menuOpen"
+          aria-controls="mobile-navigation"
+          :aria-label="menuOpen ? 'Close navigation menu' : 'Open navigation menu'"
+          @click="menuOpen = !menuOpen"
+        >
+          <X v-if="menuOpen" :size="22" aria-hidden="true" />
+          <Menu v-else :size="22" aria-hidden="true" />
+        </button>
+      </div>
 
       <Transition name="nav-menu">
         <div

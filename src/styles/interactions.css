@@ -209,7 +209,7 @@ html.garden-motion .project-card:nth-child(4) {
 }
 
 .pixel-farm-card-header span:last-child {
-  color: #96704e;
+  color: var(--text-subtle);
 }
 
 .pixel-farm-card-header i {
@@ -227,7 +227,7 @@ html.garden-motion .project-card:nth-child(4) {
 
 .pixel-farm-card figcaption {
   padding: 4px 3px 1px;
-  color: rgba(63, 89, 69, 0.65);
+  color: var(--text-subtle);
   font-family: var(--serif);
   font-size: 8px;
   font-style: italic;
@@ -593,7 +593,7 @@ html.garden-motion .project-card:nth-child(4) {
 }
 
 .farm-dream-message b {
-  color: #b96f60;
+  color: var(--heart-accent);
   font-family: Georgia, serif;
   font-size: 10px;
   font-style: normal;
@@ -999,5 +999,764 @@ html.garden-motion .project-card:nth-child(4) {
   .hero-pixel-chick,
   .hero-pixel-chick:hover {
     transform: translateX(-50%);
+  }
+}
+/* Project farm metaphors: local motion only, with no luminous borders. */
+.project-card::after {
+  position: absolute;
+  z-index: 0;
+  top: -32px;
+  right: -38px;
+  width: 165px;
+  height: 145px;
+  border-radius: 46% 54% 64% 36%;
+  content: "";
+  opacity: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse at 37% 40%, rgba(229, 194, 114, 0.18) 0 20%, transparent 22%),
+    radial-gradient(ellipse at 66% 62%, rgba(63, 89, 69, 0.13) 0 23%, transparent 25%);
+  filter: blur(1px);
+  transform: rotate(-12deg) translateY(7px);
+  transition:
+    opacity 260ms ease,
+    transform 360ms ease;
+}
+
+.project-card:hover::after,
+.project-card:focus-visible::after {
+  opacity: 0.72;
+  transform: rotate(-7deg) translateY(0);
+}
+
+.project-flow-path,
+.flow-node path,
+.toolbox-handle,
+.toolbox-lid,
+.toolbox-tool,
+.feedback-line,
+.receipt-flow-arrow,
+.ordered-seeds path,
+.irrigation-channel,
+.irrigation-branch,
+.node-vein {
+  fill: none;
+  stroke: var(--project-accent);
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.project-flow-path {
+  opacity: 0.58;
+  stroke-dasharray: 5 6;
+  stroke-width: 2px;
+}
+
+.flow-node circle {
+  fill: rgba(255, 253, 247, 0.82);
+  stroke: var(--project-accent);
+  stroke-width: 2px;
+}
+
+.flow-node path {
+  stroke-width: 2.3px;
+}
+
+.toolbox-handle,
+.toolbox-tool {
+  stroke-width: 2px;
+}
+
+.toolbox-body {
+  fill: color-mix(in srgb, var(--project-accent) 34%, #d8a970);
+  stroke: var(--project-accent);
+  stroke-width: 2px;
+}
+
+.toolbox-lid {
+  stroke-width: 2px;
+}
+
+.toolbox-latch {
+  fill: #e1bb67;
+  stroke: var(--project-accent);
+  stroke-width: 1px;
+}
+
+.dialogue-bubble rect,
+.dialogue-bubble > path:not(.feedback-line) {
+  fill: rgba(255, 253, 247, 0.78);
+  stroke: var(--project-accent);
+  stroke-width: 1.6px;
+}
+
+.dialogue-bubble circle {
+  fill: var(--project-accent);
+  opacity: 0.66;
+}
+
+.feedback-line {
+  opacity: 0.58;
+  stroke-width: 2px;
+}
+
+.bookkeeping-coin {
+  fill: #d9ad58;
+  stroke: #9a7045;
+  stroke-width: 2px;
+}
+
+
+.bookkeeping-seed {
+  fill: #a97858;
+  stroke: #76513f;
+  stroke-width: 1.5px;
+}
+
+.bookkeeping-pixel {
+  fill: color-mix(in srgb, var(--project-accent) 55%, #fffdf7);
+}
+
+.receipt-flow-arrow {
+  stroke-width: 2px;
+}
+
+.receipt-pixel-header {
+  fill: color-mix(in srgb, var(--project-accent) 36%, #fffdf7);
+}
+
+.structured-row rect {
+  fill: color-mix(in srgb, var(--project-accent) 42%, #fffdf7);
+}
+
+.structured-row rect:first-child {
+  fill: color-mix(in srgb, var(--project-accent) 68%, #fffdf7);
+}
+
+.ordered-seeds circle {
+  fill: #d9ad58;
+  stroke: #9a7045;
+  stroke-width: 1.5px;
+}
+
+.ordered-seeds path {
+  opacity: 0.46;
+  stroke-width: 2px;
+}
+
+.irrigation-channel {
+  opacity: 0.72;
+  stroke: var(--lake);
+  stroke-dasharray: 7 6;
+  stroke-width: 3px;
+}
+
+.irrigation-branch {
+  opacity: 0.55;
+  stroke: var(--lake);
+  stroke-dasharray: 3 5;
+  stroke-width: 1.8px;
+}
+
+.water-node {
+  fill: var(--lake);
+  stroke: rgba(255, 253, 247, 0.92);
+  stroke-width: 2px;
+}
+
+.data-leaf-nodes path:not(.node-vein) {
+  fill: color-mix(in srgb, var(--project-accent) 45%, #fffdf7);
+  stroke: var(--project-accent);
+  stroke-width: 1.3px;
+}
+
+.node-vein {
+  opacity: 0.55;
+  stroke-width: 1px;
+}
+
+.project-gold-star {
+  position: absolute;
+  top: 18px;
+  right: 22px;
+  width: 10px;
+  height: 10px;
+  opacity: 0;
+  pointer-events: none;
+  transform: rotate(45deg) scale(0.5);
+}
+
+.project-gold-star::before,
+.project-gold-star::after {
+  position: absolute;
+  content: "";
+  background: #d5ad5f;
+}
+
+.project-gold-star::before {
+  top: 0;
+  left: 4px;
+  width: 2px;
+  height: 10px;
+}
+
+.project-gold-star::after {
+  top: 4px;
+  left: 0;
+  width: 10px;
+  height: 2px;
+}
+
+.project-card:hover .project-gold-star {
+  animation: project-star-visit 1.25s steps(3, end) 420ms 1;
+}
+
+.project-card:focus-visible .project-gold-star {
+  opacity: 0.7;
+  transform: rotate(45deg) scale(0.76);
+}
+
+.project-card:hover .fern-frond {
+  animation: project-fern-breathe 1.4s ease-in-out infinite alternate;
+  transform-box: fill-box;
+  transform-origin: left bottom;
+}
+
+.project-card:hover .project-flow-path {
+  animation: project-path-travel 1.5s linear infinite;
+}
+
+.project-card:hover .project-toolbox {
+  transform: translateY(-3px);
+}
+
+.project-toolbox,
+.dialogue-bubble,
+.loose-bookkeeping-items,
+.structured-row,
+.data-leaf-nodes {
+  transition: transform 360ms ease;
+}
+
+.project-card:hover .bubble-left {
+  transform: translate(-3px, -3px);
+}
+
+.project-card:hover .bubble-right {
+  transform: translate(3px, -5px);
+}
+
+.project-card:hover .loose-bookkeeping-items {
+  transform: translateX(6px);
+}
+
+.project-card:hover .structured-row:nth-child(odd) {
+  transform: translateX(3px);
+}
+
+.project-card:hover .structured-row:nth-child(even) {
+  transform: translateX(-2px);
+}
+
+.project-card:hover .irrigation-channel {
+  animation: project-water-flow 1.3s linear infinite;
+}
+
+.project-card:hover .data-leaf-nodes {
+  transform: translateY(-2px);
+}
+
+@keyframes project-star-visit {
+  0% {
+    opacity: 0;
+    transform: rotate(45deg) scale(0.4);
+  }
+
+  35%,
+  68% {
+    opacity: 0.88;
+    transform: rotate(45deg) scale(1);
+  }
+
+  100% {
+    opacity: 0;
+    transform: rotate(45deg) scale(0.5) translateY(-4px);
+  }
+}
+
+@keyframes project-fern-breathe {
+  to {
+    transform: rotate(-1.2deg);
+  }
+}
+
+@keyframes project-path-travel {
+  to {
+    stroke-dashoffset: -22;
+  }
+}
+
+@keyframes project-water-flow {
+  to {
+    stroke-dashoffset: -26;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .project-card:hover .project-gold-star,
+  .project-card:hover .fern-frond,
+  .project-card:hover .project-flow-path,
+  .project-card:hover .irrigation-channel {
+    animation: none !important;
+  }
+
+  .project-card:hover .project-toolbox,
+  .project-card:hover .bubble-left,
+  .project-card:hover .bubble-right,
+  .project-card:hover .loose-bookkeeping-items,
+  .project-card:hover .structured-row,
+  .project-card:hover .data-leaf-nodes {
+    transform: none;
+  }
+}
+/* Seasonal Journey: one continuous path, four restrained natural stages. */
+.journey-vine-segment {
+  fill: none;
+  stroke-linecap: round;
+  stroke-width: 3;
+  vector-effect: non-scaling-stroke;
+}
+
+.season-spring {
+  stroke: #9fb58d;
+}
+
+.season-summer {
+  stroke: #668160;
+}
+
+.season-autumn {
+  stroke: #b78b62;
+}
+
+.season-growing {
+  stroke: #729a83;
+}
+
+.journey-stage-label {
+  display: inline-flex;
+  min-height: 24px;
+  padding: 4px 9px;
+  margin-bottom: 12px;
+  border: 1px solid color-mix(in srgb, var(--journey-stage-color, var(--sage)) 34%, transparent);
+  border-radius: 999px;
+  align-items: center;
+  color: var(--journey-stage-color, var(--forest));
+  background: color-mix(in srgb, var(--journey-stage-color, var(--sage)) 10%, var(--paper));
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.journey-seed {
+  --journey-stage-color: #8ca27e;
+}
+
+.journey-shoot {
+  --journey-stage-color: #5f7d5c;
+}
+
+.journey-branch {
+  --journey-stage-color: #ad7d55;
+}
+
+.journey-leaf {
+  --journey-stage-color: #658f7e;
+}
+
+.journey-entry .journey-leaf-marker {
+  transition:
+    background-color 280ms ease,
+    border-color 280ms ease,
+    transform 480ms cubic-bezier(0.2, 0.75, 0.2, 1);
+}
+
+.journey-entry .journey-leaf-marker i {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 1px;
+  height: 15px;
+  content: "";
+  background: color-mix(in srgb, var(--forest) 55%, transparent);
+  transform: translate(-50%, -50%) rotate(57deg) scaleY(0);
+  transform-origin: center;
+  transition: transform 420ms ease 120ms;
+}
+
+.journey-entry.journey-revealed .journey-leaf-marker i {
+  transform: translate(-50%, -50%) rotate(57deg) scaleY(1);
+}
+
+.journey-seed .journey-leaf-marker {
+  width: 18px;
+  height: 18px;
+  border-radius: 52% 48% 58% 42%;
+  background: #b29370;
+}
+
+.journey-shoot .journey-leaf-marker {
+  background: #9fb58d;
+}
+
+.journey-branch .journey-leaf-marker {
+  background: #c99c70;
+}
+
+.journey-leaf .journey-leaf-marker {
+  background: #82ad98;
+}
+
+.journey-leaf .journey-note {
+  border-color: color-mix(in srgb, var(--lake) 45%, var(--line));
+  box-shadow:
+    0 13px 30px rgba(63, 89, 69, 0.09),
+    inset 3px 0 color-mix(in srgb, var(--lake) 55%, transparent);
+}
+
+.journey-leaf.journey-revealed .journey-leaf-marker {
+  animation: current-sprout-breathe 4.8s ease-in-out infinite;
+}
+
+@keyframes current-sprout-breathe {
+  0%,
+  100% {
+    box-shadow: 0 0 0 7px var(--warm-soft);
+  }
+
+  50% {
+    box-shadow:
+      0 0 0 7px var(--warm-soft),
+      0 0 0 10px color-mix(in srgb, var(--lake) 15%, transparent);
+  }
+}
+
+@media (max-width: 767px) {
+  .journey-stage-label {
+    margin-bottom: 9px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .journey-leaf.journey-revealed .journey-leaf-marker {
+    animation: none;
+  }
+
+  .journey-entry .journey-leaf-marker i {
+    transform: translate(-50%, -50%) rotate(57deg) scaleY(1);
+  }
+}
+/* Five original pixel keepsakes in Beyond Code, including the wooden sign. */
+.pixel-decor-shelf {
+  position: relative;
+  display: grid;
+  max-width: 720px;
+  padding: 36px 34px 25px;
+  margin: 78px auto 0;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  align-items: end;
+  justify-content: center;
+  gap: 29px;
+  grid-template-columns: repeat(4, 64px);
+  background: color-mix(in srgb, var(--paper) 70%, transparent);
+  box-shadow:
+    inset 0 -9px color-mix(in srgb, var(--clay) 25%, var(--paper)),
+    0 14px 28px rgba(63, 89, 69, 0.06);
+  image-rendering: pixelated;
+}
+
+.pixel-shelf-sign {
+  position: absolute;
+  top: -14px;
+  left: 24px;
+  padding: 5px 10px;
+  border: 2px solid #76583f;
+  color: #5b4635;
+  background: #d4ae72;
+  box-shadow: 4px 4px #8f6a49;
+  font-family:
+    Consolas, "Courier New", monospace;
+  font-size: 8px;
+  font-weight: 900;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.pixel-decor-item {
+  position: relative;
+  display: block;
+  width: 64px;
+  height: 58px;
+  padding: 0;
+  border: 0;
+  color: var(--text);
+  background: transparent;
+}
+
+button.pixel-decor-item {
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+button.pixel-decor-item:hover {
+  background: color-mix(in srgb, var(--sage-soft) 58%, transparent);
+}
+
+button.pixel-decor-item:focus-visible {
+  outline: 3px solid var(--clay);
+  outline-offset: 4px;
+}
+
+.pixel-decor-item i,
+.pixel-decor-item b {
+  position: absolute;
+  display: block;
+}
+
+.decor-chick-body {
+  right: 8px;
+  bottom: 12px;
+  width: 31px;
+  height: 23px;
+  background: #d8b465;
+  box-shadow:
+    -5px 5px #d8b465,
+    5px 0 #d8b465;
+}
+
+.decor-chick-head {
+  top: 10px;
+  left: 10px;
+  width: 23px;
+  height: 21px;
+  background: #e4c274;
+  box-shadow:
+    4px -4px #e4c274,
+    4px 4px #e4c274;
+}
+
+.decor-chick-eye {
+  top: 16px;
+  left: 27px;
+  width: 4px;
+  height: 4px;
+  background: #3f423b;
+}
+
+.decor-chick-beak {
+  top: 22px;
+  left: 5px;
+  width: 8px;
+  height: 5px;
+  background: #b8794f;
+}
+
+.decor-chick-legs {
+  bottom: 4px;
+  left: 30px;
+  width: 4px;
+  height: 10px;
+  background: #9f6d48;
+  box-shadow: 16px 0 #9f6d48;
+}
+
+.decor-chicken.walking {
+  animation: shelf-chick-walk 1.3s steps(5, end) 1;
+}
+
+.decor-pot {
+  right: 15px;
+  bottom: 5px;
+  width: 34px;
+  height: 19px;
+  background: #b77f59;
+  box-shadow: inset 0 5px #ce9a6e;
+}
+
+.decor-stem {
+  bottom: 23px;
+  left: 31px;
+  width: 4px;
+  height: 27px;
+  background: #5f7d58;
+}
+
+.decor-leaf {
+  width: 16px;
+  height: 8px;
+  background: #8faa7d;
+}
+
+.decor-leaf-one {
+  top: 20px;
+  left: 17px;
+}
+
+.decor-leaf-two {
+  top: 12px;
+  right: 14px;
+}
+
+.decor-new-leaf {
+  top: 5px;
+  left: 17px;
+  opacity: 0;
+  transform: scale(0);
+  transform-origin: right bottom;
+  transition:
+    opacity 260ms ease,
+    transform 420ms cubic-bezier(0.2, 0.8, 0.2, 1.25);
+}
+
+.decor-plant.grown .decor-new-leaf {
+  opacity: 1;
+  transform: scale(1) rotate(-12deg);
+}
+
+.piano-case {
+  right: 6px;
+  bottom: 8px;
+  width: 52px;
+  height: 37px;
+  border: 4px solid #725341;
+  background: #9b7054;
+  box-shadow: inset 0 7px #b98963;
+}
+
+.piano-keys {
+  right: 11px;
+  bottom: 13px;
+  width: 42px;
+  height: 13px;
+  background: repeating-linear-gradient(90deg, #f0ead8 0 6px, #6d5c4d 6px 8px);
+}
+
+.piano-notes {
+  position: absolute;
+  top: -5px;
+  right: 4px;
+  color: var(--forest);
+  font-family: Georgia, serif;
+  font-size: 18px;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.piano-notes.visible {
+  animation: visual-notes-rise 1.4s ease-out 1;
+}
+
+.decor-seed-bag i {
+  right: 11px;
+  bottom: 6px;
+  width: 41px;
+  height: 43px;
+  border: 3px solid #806049;
+  border-radius: 4px 4px 10px 10px;
+  background: #d0ae75;
+  box-shadow: inset 0 8px #b78e5e;
+}
+
+.decor-seed-bag b {
+  top: 25px;
+  left: 27px;
+  color: #5b7455;
+  font-family: Georgia, serif;
+  font-size: 18px;
+  line-height: 1;
+}
+
+@keyframes shelf-chick-walk {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+
+  20% {
+    transform: translate(5px, -3px);
+  }
+
+  40% {
+    transform: translateX(10px);
+  }
+
+  60% {
+    transform: translate(15px, -3px);
+  }
+
+  80% {
+    transform: translateX(20px);
+  }
+}
+
+@keyframes visual-notes-rise {
+  0% {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+
+  25%,
+  70% {
+    opacity: 0.9;
+  }
+
+  100% {
+    opacity: 0;
+    transform: translate(-8px, -18px);
+  }
+}
+
+@media (max-width: 767px) {
+  .pixel-decor-shelf {
+    padding: 33px 15px 22px;
+    margin-top: 56px;
+    gap: 9px;
+    grid-template-columns: repeat(4, minmax(43px, 54px));
+  }
+
+  .pixel-decor-item {
+    width: 54px;
+    transform: scale(0.86);
+    transform-origin: center bottom;
+  }
+
+  .decor-chicken.walking {
+    animation: none;
+  }
+}
+
+@media (max-width: 420px) {
+  .pixel-decor-shelf {
+    gap: 2px;
+    grid-template-columns: repeat(4, minmax(38px, 48px));
+  }
+
+  .pixel-decor-item {
+    width: 48px;
+    transform: scale(0.75);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .decor-chicken.walking,
+  .piano-notes.visible {
+    animation: none;
+  }
+
+  .decor-new-leaf {
+    transition: none;
   }
 }

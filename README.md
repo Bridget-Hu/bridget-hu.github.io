@@ -44,9 +44,11 @@ services, a backend, a database, or API keys.
 | --- | --- |
 | **Living hero** | An animated plant grows from an open notebook, with Build, Learn, and Explore leaves. |
 | **Original farm patch** | Hills, crops, a turning windmill, growing plant, and clickable geometric chick add a personal farm-game reference without borrowed assets. |
-| **Project greenhouse** | Responsive project cards combine custom botanical diagrams with subtle pointer-aware depth and paper highlights. |
+| **Project greenhouse** | Four original farm metaphors visualize diagnosis, dialogue, structured records, and modeling without changing project data. |
 | **Growth path** | Seed, sprout, and leaf stages communicate Bridget's build–collaborate–reflect approach. |
-| **Field notes** | Journey, current focus, interests, and contact details use journals, paper notes, vines, and postcards. |
+| **Seasonal journey** | A four-stage vine draws through Starting, Building, Learning, and Still Growing while preserving real years and events. |
+| **Day / Evening** | A stored, accessible theme switch moves between bright paper tones and a gray-blue farm evening with warm window light. |
+| **Pixel keepsakes** | Five original Beyond Code objects — wooden sign, chick, plant, piano, and seed bag — add quiet visual interactions without sound. |
 | **Garden interaction layer** | A bounded Canvas trail draws soft gold stars, seeds, leaves, and a tiny pixel-flower bloom on click. |
 
 ### Design principles
@@ -83,6 +85,8 @@ bridget-hu.github.io/
 │  ├─ components/
 │  │  ├─ CursorTrail.vue            # Bounded Canvas particle system
 │  │  ├─ PixelFarmScene.vue         # Original pixel farm vignette
+│  │  ├─ PixelFarmDecor.vue         # Five pixel keepsakes, including the wooden sign
+│  │  ├─ ThemeToggle.vue            # Stored Day / Evening control
 │  │  ├─ PlantHeroVisual.vue        # Animated botanical hero
 │  │  ├─ ProjectCard.vue            # Pointer-aware project presentation
 │  │  └─ ...                        # About, journey, growth, contact, and more
@@ -91,7 +95,8 @@ bridget-hu.github.io/
 │  ├─ data/                         # Projects, journey, current focus, contact
 │  ├─ styles/
 │  │  ├─ main.css                   # Core design system and responsive layout
-│  │  └─ interactions.css           # Progressive interaction layer
+│  │  ├─ interactions.css           # Progressive interaction layer
+│  │  └─ theme.css                  # Day / Evening palette and transitions
 │  ├─ App.vue
 │  └─ main.ts
 ├─ package.json
@@ -139,7 +144,11 @@ The interaction layer is progressive and intentionally conservative:
 - the Canvas uses `pointer-events: none`, so links, buttons, selection, and scrolling remain
   unaffected;
 - project depth effects are limited to fine-pointer devices and reset on pointer exit or
-  keyboard blur.
+  keyboard blur;
+- Day / Evening choice is stored locally, requires no theme library, and keeps static
+  deployment behavior unchanged;
+- mobile layouts disable cursor and Hero pointer parallax while simplifying decorative
+  pixel motion.
 
 ## Content guide
 
@@ -155,6 +164,7 @@ The portfolio content is deliberately separated from most presentation code.
 | Beyond Code interests | `src/components/BeyondCodeSection.vue` |
 | Global palette and responsive rules | `src/styles/main.css` |
 | Motion and pixel-farm polish | `src/styles/interactions.css` |
+| Day / Evening theme palette | `src/styles/theme.css` |
 
 ### Email and resume placeholders
 

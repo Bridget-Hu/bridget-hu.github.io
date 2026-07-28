@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { BookOpen, Clapperboard, Music2, Sprout } from 'lucide-vue-next'
 
+import PixelFarmDecor from './PixelFarmDecor.vue'
 import SectionHeading from './SectionHeading.vue'
 
 const interests = [
@@ -41,14 +42,6 @@ const interests = [
           description="There is more to a good working life than the work itself."
         />
 
-        <div class="pixel-chick" role="img" aria-label="A small original pixel-art chick">
-          <span class="chick-body"></span>
-          <span class="chick-head"></span>
-          <span class="chick-eye"></span>
-          <span class="chick-beak"></span>
-          <span class="chick-leg leg-one"></span>
-          <span class="chick-leg leg-two"></span>
-        </div>
       </div>
 
       <div class="interest-board">
@@ -79,6 +72,8 @@ const interests = [
           </div>
         </article>
       </div>
+
+      <PixelFarmDecor />
     </div>
   </section>
 </template>

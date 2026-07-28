@@ -19,6 +19,9 @@ useGardenReveal()
   <div class="site-shell">
     <a class="skip-link" href="#main-content">Skip to content</a>
     <CursorTrail />
+    <div class="evening-fireflies" aria-hidden="true">
+      <i></i><i></i><i></i><i></i><i></i>
+    </div>
     <AppHeader />
     <main id="main-content">
       <HeroSection />
