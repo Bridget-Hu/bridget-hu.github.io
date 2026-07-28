@@ -1,57 +1,123 @@
-# Bridget Hu's Digital Garden
+<p align="center">
+  <img src="./public/readme-banner.svg" alt="Bridget Hu's Digital Garden — a warm botanical portfolio with an original pixel farm vignette" width="100%" />
+</p>
 
-A responsive personal portfolio for Bridget Hu, designed as a warm and evolving digital
-garden. The site brings together selected software projects, learning notes, current
-interests, and a concise personal journey around one idea: **Growing through building.**
+<p align="center">
+  <strong>A warm, evolving portfolio for projects, learning, and the quieter things beyond code.</strong>
+</p>
 
-## Design theme
+<p align="center">
+  <img alt="Vue 3" src="https://img.shields.io/badge/Vue-3-4f7654?style=flat-square&logo=vuedotjs&logoColor=white" />
+  <img alt="TypeScript 5.9" src="https://img.shields.io/badge/TypeScript-5.9-668f88?style=flat-square&logo=typescript&logoColor=white" />
+  <img alt="Vite 7" src="https://img.shields.io/badge/Vite-7-b68a65?style=flat-square&logo=vite&logoColor=white" />
+  <img alt="pnpm 10" src="https://img.shields.io/badge/pnpm-10-8a765e?style=flat-square&logo=pnpm&logoColor=white" />
+  <img alt="Motion aware" src="https://img.shields.io/badge/Motion-accessible-748c6a?style=flat-square" />
+</p>
 
-The visual system uses warm paper surfaces, soft sage green, lake blue, natural line art,
-and original botanical SVG illustrations. The layout is intentionally quieter and more
-personal than a conventional developer portfolio while remaining suitable for internship,
-laboratory, competition, and graduate applications.
+<p align="center">
+  <a href="#about-this-garden">Overview</a> ·
+  <a href="#experience-the-garden">Experience</a> ·
+  <a href="#project-map">Project map</a> ·
+  <a href="#local-development">Development</a> ·
+  <a href="#content-guide">Content guide</a>
+</p>
 
-Core visual elements include:
+---
 
-- an animated digital plant in the hero;
-- botanical project illustrations;
-- a connected growth path and vine timeline;
-- paper notes, field records, and a contact postcard;
-- responsive, reduced-motion-aware interactions.
+## About this garden
 
-No remote images, external font services, backend, database, or API keys are used.
+Bridget Hu's Digital Garden is a responsive personal portfolio built around one idea:
+**growing through building**. It brings selected software projects, a learning journey,
+current interests, and personal notes into a bright editorial experience that feels more
+like a tended corner of the web than a conventional developer template.
+
+The visual system combines warm paper surfaces, sage green, lake blue, clay accents,
+botanical line art, and original generic pixel-farm details. Every illustration is built
+inside the repository; the website does not depend on remote images, external font
+services, a backend, a database, or API keys.
+
+> Thoughtful software can still feel human, calm, and full of character.
+
+## Experience the garden
+
+| Area | What it adds |
+| --- | --- |
+| **Living hero** | An animated plant grows from an open notebook, with Build, Learn, and Explore leaves. |
+| **Original farm patch** | Hills, crops, a turning windmill, growing plant, and clickable geometric chick add a personal farm-game reference without borrowed assets. |
+| **Project greenhouse** | Responsive project cards combine custom botanical diagrams with subtle pointer-aware depth and paper highlights. |
+| **Growth path** | Seed, sprout, and leaf stages communicate Bridget's build–collaborate–reflect approach. |
+| **Field notes** | Journey, current focus, interests, and contact details use journals, paper notes, vines, and postcards. |
+| **Garden interaction layer** | A bounded Canvas trail draws soft gold stars, seeds, leaves, and a tiny pixel-flower bloom on click. |
+
+### Design principles
+
+1. **Natural, not nostalgic by imitation** — pixel elements are original and use a generic
+   farm-game vocabulary rather than borrowed characters, maps, icons, fonts, or UI.
+2. **Warm, not visually flat** — depth, light, parallax, staggered reveals, and tactile hover
+   feedback add polish without introducing neon or cyberpunk motifs.
+3. **Expressive, not distracting** — motion stays small, short, and secondary to the content.
+4. **Accessible by default** — keyboard focus, semantic markup, responsive layouts, and
+   reduced-motion behavior are treated as core features.
 
 ## Technology
 
-- Vue 3
-- Vite
-- TypeScript
-- Tailwind CSS
-- GSAP
-- lucide-vue-next
-- pnpm
+| Layer | Tools |
+| --- | --- |
+| Interface | Vue 3, TypeScript |
+| Build system | Vite 7 |
+| Styling | Tailwind CSS 4, handcrafted CSS |
+| Motion | GSAP, Intersection Observer, Canvas 2D |
+| Icons | lucide-vue-next |
+| Package manager | pnpm 10 |
+| Deployment | GitHub Actions, GitHub Pages workflow |
+
+## Project map
+
+```text
+bridget-hu.github.io/
+├─ .github/workflows/deploy.yml     # GitHub Pages build and deployment
+├─ public/
+│  ├─ favicon.svg
+│  └─ readme-banner.svg             # Original repository banner
+├─ src/
+│  ├─ components/
+│  │  ├─ CursorTrail.vue            # Bounded Canvas particle system
+│  │  ├─ PixelFarmScene.vue         # Original pixel farm vignette
+│  │  ├─ PlantHeroVisual.vue        # Animated botanical hero
+│  │  ├─ ProjectCard.vue            # Pointer-aware project presentation
+│  │  └─ ...                        # About, journey, growth, contact, and more
+│  ├─ composables/
+│  │  └─ useGardenReveal.ts         # Motion-aware viewport reveals
+│  ├─ data/                         # Projects, journey, current focus, contact
+│  ├─ styles/
+│  │  ├─ main.css                   # Core design system and responsive layout
+│  │  └─ interactions.css           # Progressive interaction layer
+│  ├─ App.vue
+│  └─ main.ts
+├─ package.json
+└─ vite.config.ts
+```
 
 ## Local development
 
-Requirements:
+### Requirements
 
 - Node.js 22 or later
 - pnpm 10
 
-Install dependencies and start the development server:
+### Start the development server
 
 ```bash
 pnpm install
 pnpm dev
 ```
 
-Vite will print the local URL, normally `http://localhost:5173`.
+Vite will print the local address, normally `http://localhost:5173`.
 
-## Production build
-
-Run the TypeScript checker and create the production bundle:
+### Validate a production build
 
 ```bash
+pnpm typecheck
 pnpm build
 ```
 
@@ -61,29 +127,38 @@ Preview the generated `dist` directory:
 pnpm preview
 ```
 
-## GitHub Pages deployment
+## Interaction and accessibility
 
-The repository includes `.github/workflows/deploy.yml`. Each push to `main` installs
-dependencies from `pnpm-lock.yaml`, builds the site, uploads `dist`, and deploys it through
-GitHub Pages.
+The interaction layer is progressive and intentionally conservative:
 
-In the repository settings, set **Pages → Build and deployment → Source** to
-**GitHub Actions**. This is the `bridget-hu.github.io` user site, so Vite uses the root
-base path `/`.
+- the cursor Canvas only starts on devices that support both `hover` and a `fine` pointer;
+- touch and coarse-pointer devices do not initialize the trail;
+- `prefers-reduced-motion: reduce` disables the Canvas and decorative animations;
+- the animation loop stops when no particles remain and pauses while the page is hidden;
+- particle count and device pixel ratio are capped to keep rendering work bounded;
+- the Canvas uses `pointer-events: none`, so links, buttons, selection, and scrolling remain
+  unaffected;
+- project depth effects are limited to fine-pointer devices and reset on pointer exit or
+  keyboard blur.
 
-## Updating content
+## Content guide
 
-- Projects and project illustration variants: `src/data/projects.ts`
-- Journey entries: `src/data/journey.ts`
-- Currently Growing items: `src/data/current.ts`
-- Email, GitHub, and resume configuration: `src/data/contact.ts`
-- About copy and interest tags: `src/components/AboutSection.vue`
-- Beyond Code interests: `src/components/BeyondCodeSection.vue`
-- Global colors, typography, and responsive rules: `src/styles/main.css`
+The portfolio content is deliberately separated from most presentation code.
 
-## Email and resume placeholders
+| Content | File |
+| --- | --- |
+| Projects and illustration variants | `src/data/projects.ts` |
+| Journey entries | `src/data/journey.ts` |
+| Currently Growing items | `src/data/current.ts` |
+| Email, GitHub, and resume settings | `src/data/contact.ts` |
+| About copy and interest tags | `src/components/AboutSection.vue` |
+| Beyond Code interests | `src/components/BeyondCodeSection.vue` |
+| Global palette and responsive rules | `src/styles/main.css` |
+| Motion and pixel-farm polish | `src/styles/interactions.css` |
 
-Replace `REPLACE_WITH_YOUR_EMAIL` in `src/data/contact.ts` when a public email address is
+### Email and resume placeholders
+
+Replace `REPLACE_WITH_YOUR_EMAIL` in `src/data/contact.ts` when a public contact address is
 ready.
 
 To add a resume:
@@ -91,5 +166,21 @@ To add a resume:
 1. add the real file to `public`, for example `public/resume.pdf`;
 2. set `RESUME_URL` in `src/data/contact.ts` to `'/resume.pdf'`.
 
-Until these values are provided, the website displays **Email coming soon** and
-**Resume coming soon** without creating invalid links.
+Until those values are provided, the website displays **Email coming soon** and
+**Resume coming soon** instead of creating invalid links.
+
+## Deployment
+
+The repository includes `.github/workflows/deploy.yml`. A push to `main` installs locked
+dependencies, builds the site, uploads `dist`, and deploys it through GitHub Pages.
+
+For this user-site repository, Vite uses the root base path `/`. In GitHub, set
+**Settings → Pages → Build and deployment → Source** to **GitHub Actions**. GitHub Pages
+availability for a private repository depends on the account plan; a public repository can
+use the standard Pages workflow.
+
+---
+
+<p align="center">
+  <em>Designed as a digital garden: useful today, still growing tomorrow.</em>
+</p>

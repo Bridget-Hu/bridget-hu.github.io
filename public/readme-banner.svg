@@ -1,0 +1,128 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="360" viewBox="0 0 1200 360" role="img" aria-labelledby="title description">
+  <title id="title">Bridget Hu's Digital Garden</title>
+  <desc id="description">A warm botanical banner with an original pixel farm vignette.</desc>
+  <defs>
+    <linearGradient id="paper" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#fffdf7"/>
+      <stop offset="1" stop-color="#eef2e8"/>
+    </linearGradient>
+    <pattern id="dots" width="18" height="18" patternUnits="userSpaceOnUse">
+      <circle cx="2" cy="2" r="1" fill="#3f5945" opacity=".08"/>
+    </pattern>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="160%">
+      <feDropShadow dx="0" dy="12" stdDeviation="10" flood-color="#3f5945" flood-opacity=".14"/>
+    </filter>
+  </defs>
+
+  <rect width="1200" height="360" rx="24" fill="url(#paper)"/>
+  <rect width="1200" height="360" rx="24" fill="url(#dots)"/>
+  <path d="M0 292C142 251 269 332 432 294S740 265 864 300s225 37 336-5v65H0Z" fill="#dfe8d7"/>
+  <path d="M0 320C156 288 280 354 468 316s315-17 427 12 210 26 305-2v34H0Z" fill="#cbd9c0"/>
+
+  <g transform="translate(76 70)">
+    <g fill="none" stroke="#748c6a" stroke-linecap="round">
+      <path d="M12 6c2 25-3 46-18 64" stroke-width="3"/>
+      <path d="M6 31C-10 29-19 20-18 8 0 7 9 16 6 31Z" fill="#a9ba9c" stroke-width="2"/>
+      <path d="M1 48c15-1 24-10 25-22C10 23 0 32 1 48Z" fill="#8fb8b0" stroke-width="2"/>
+    </g>
+    <text x="50" y="18" fill="#748c6a" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="700" letter-spacing="3">BRIDGET HU</text>
+    <text x="50" y="92" fill="#3f5945" font-family="Georgia, Times New Roman, serif" font-size="68" font-weight="600">Digital Garden</text>
+    <text x="53" y="137" fill="#667064" font-family="Segoe UI, Arial, sans-serif" font-size="21">Growing through building — one thoughtful project at a time.</text>
+
+    <g transform="translate(51 178)" font-family="Segoe UI, Arial, sans-serif" font-size="12" font-weight="700">
+      <g>
+        <rect width="92" height="34" rx="17" fill="#3f5945"/>
+        <text x="46" y="22" text-anchor="middle" fill="#fffdf7">VUE 3</text>
+      </g>
+      <g transform="translate(104)">
+        <rect width="116" height="34" rx="17" fill="#edf3f1" stroke="#8fb8b0"/>
+        <text x="58" y="22" text-anchor="middle" fill="#3f5945">TYPESCRIPT</text>
+      </g>
+      <g transform="translate(232)">
+        <rect width="151" height="34" rx="17" fill="#f4efe5" stroke="#d3b38f"/>
+        <text x="75.5" y="22" text-anchor="middle" fill="#6e5947">ACCESSIBLE MOTION</text>
+      </g>
+    </g>
+  </g>
+
+  <g transform="translate(810 44)" filter="url(#shadow)" shape-rendering="crispEdges">
+    <rect width="310" height="246" rx="8" fill="#fffaf0" stroke="#3f5945" stroke-opacity=".28" stroke-width="2"/>
+    <rect x="12" y="40" width="286" height="174" fill="#bad1c0" stroke="#3f5945" stroke-opacity=".25" stroke-width="2"/>
+    <rect x="18" y="12" width="8" height="8" fill="#d3ad61"/>
+    <text x="34" y="21" fill="#3f5945" font-family="Consolas, monospace" font-size="11" font-weight="700" letter-spacing="1">BRIDGET'S BUILD PATCH</text>
+    <text x="290" y="21" text-anchor="end" fill="#96704e" font-family="Consolas, monospace" font-size="10" font-weight="700">SUNNY</text>
+
+    <rect x="251" y="58" width="23" height="23" fill="#e5c272"/>
+    <rect x="258" y="49" width="9" height="5" fill="#e5c272"/>
+    <rect x="258" y="85" width="9" height="5" fill="#e5c272"/>
+    <rect x="241" y="65" width="5" height="10" fill="#e5c272"/>
+    <rect x="279" y="65" width="5" height="10" fill="#e5c272"/>
+
+    <g fill="#f5f0df">
+      <rect x="35" y="65" width="42" height="10"/>
+      <rect x="46" y="56" width="22" height="10"/>
+      <rect x="170" y="78" width="32" height="9"/>
+      <rect x="179" y="70" width="16" height="9"/>
+    </g>
+
+    <path d="M12 139h22v-12h27v-9h31v12h28v9h25v-15h26v-9h28v12h24v12h29v-11h27v11h29v25H12Z" fill="#8faa80"/>
+    <path d="M12 153h35v-9h34v8h31v-12h34v11h31v-8h37v10h33v-13h30v11h31v28H12Z" fill="#718e68"/>
+
+    <g>
+      <rect x="55" y="112" width="86" height="59" fill="#e5c89d"/>
+      <path d="M43 116h12v-13h12V92h61v10h13v12h13v9H43Z" fill="#9a6550"/>
+      <rect x="70" y="130" width="20" height="19" fill="#e3c774" stroke="#f5e5aa" stroke-width="3"/>
+      <path d="M80 130v19M70 139h20" fill="none" stroke="#8b6c53" stroke-width="2"/>
+      <rect x="106" y="137" width="23" height="34" fill="#6e765f"/>
+      <rect x="112" y="143" width="11" height="18" fill="#879077"/>
+      <rect x="126" y="152" width="4" height="4" fill="#e1bb67"/>
+      <rect x="117" y="80" width="12" height="25" fill="#795a4a"/>
+      <g fill="#e9e5d8" opacity=".82">
+        <rect x="119" y="69" width="8" height="8"/>
+        <rect x="127" y="59" width="7" height="7"/>
+        <rect x="133" y="50" width="5" height="5"/>
+      </g>
+    </g>
+
+    <rect x="12" y="171" width="286" height="22" fill="#769267"/>
+    <rect x="12" y="193" width="286" height="21" fill="#a97858"/>
+    <g fill="#835a43">
+      <rect x="177" y="197" width="107" height="5"/>
+      <rect x="177" y="209" width="107" height="5"/>
+    </g>
+    <g fill="#52734d">
+      <rect x="187" y="184" width="4" height="17"/>
+      <rect x="218" y="195" width="4" height="17"/>
+      <rect x="249" y="184" width="4" height="17"/>
+      <rect x="274" y="195" width="4" height="17"/>
+    </g>
+    <g fill="#8da777">
+      <rect x="180" y="186" width="10" height="6"/>
+      <rect x="190" y="181" width="10" height="6"/>
+      <rect x="211" y="197" width="10" height="6"/>
+      <rect x="221" y="192" width="10" height="6"/>
+      <rect x="242" y="186" width="10" height="6"/>
+      <rect x="252" y="181" width="10" height="6"/>
+      <rect x="267" y="197" width="10" height="6"/>
+      <rect x="277" y="192" width="10" height="6"/>
+    </g>
+
+    <g>
+      <rect x="30" y="177" width="6" height="30" fill="#73513c"/>
+      <rect x="18" y="171" width="31" height="20" fill="#d7b274" stroke="#73513c" stroke-width="2"/>
+      <text x="33.5" y="185" text-anchor="middle" fill="#4c5f42" font-family="Consolas, monospace" font-size="10" font-weight="900">BH</text>
+    </g>
+    <text x="291" y="235" text-anchor="end" fill="#667064" font-family="Georgia, serif" font-size="11" font-style="italic">ideas planted here</text>
+  </g>
+
+  <g transform="translate(752 275)" fill="#d8b66f" shape-rendering="crispEdges">
+    <rect x="14" y="8" width="24" height="19"/>
+    <rect x="8" y="12" width="32" height="15"/>
+    <rect x="0" y="0" width="19" height="20" fill="#e4c37c"/>
+    <rect x="4" y="-5" width="15" height="25" fill="#e4c37c"/>
+    <rect x="14" y="5" width="4" height="4" fill="#3f423b"/>
+    <rect x="-5" y="10" width="7" height="5" fill="#b8794f"/>
+    <rect x="18" y="27" width="4" height="10" fill="#a8734d"/>
+    <rect x="31" y="27" width="4" height="10" fill="#a8734d"/>
+  </g>
+</svg>

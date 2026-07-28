@@ -28,7 +28,7 @@ const iconMap: Record<CurrentItemKind, Component> = {
         </div>
       </div>
 
-      <div class="current-board">
+      <div class="current-board" data-garden-reveal>
         <div class="current-board-header">
           <span>Bridget's field notes</span>
           <span aria-hidden="true">04 ongoing</span>

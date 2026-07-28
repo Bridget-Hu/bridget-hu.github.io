@@ -57,6 +57,7 @@ const interests = [
           :key="interest.title"
           class="interest-note"
           :class="`interest-${interest.style}`"
+          data-garden-reveal
         >
           <span class="interest-tape" aria-hidden="true"></span>
           <div class="interest-note-header">
@@ -69,6 +70,13 @@ const interests = [
           </div>
           <h3>{{ interest.title }}</h3>
           <p>{{ interest.detail }}</p>
+
+          <div v-if="interest.style === 'farm'" class="pixel-crop-row" aria-hidden="true">
+            <span class="pixel-soil-strip"></span>
+            <i v-for="crop in 5" :key="crop">
+              <b></b>
+            </i>
+          </div>
         </article>
       </div>
     </div>

@@ -2,31 +2,66 @@
 import gsap from 'gsap'
 import { onBeforeUnmount, onMounted, ref } from 'vue'
 
+import PixelFarmScene from './PixelFarmScene.vue'
+
 const stage = ref<HTMLElement | null>(null)
 const composition = ref<SVGSVGElement | null>(null)
 let animationContext: gsap.Context | undefined
-let moveX: gsap.QuickToFunc | undefined
-let moveY: gsap.QuickToFunc | undefined
+
+interface ParallaxLayer {
+  setX: gsap.QuickToFunc
+  setY: gsap.QuickToFunc
+  strengthX: number
+  strengthY: number
+}
+
+const parallaxLayers: ParallaxLayer[] = []
+const parallaxTargets: Element[] = []
+
+function registerParallaxLayer(
+  selector: string,
+  strengthX: number,
+  strengthY: number,
+  duration: number,
+) {
+  if (!stage.value) return
+  const targets = Array.from(stage.value.querySelectorAll<HTMLElement | SVGElement>(selector))
+  if (!targets.length) return
+
+  parallaxTargets.push(...targets)
+  parallaxLayers.push({
+    setX: gsap.quickTo(targets, 'x', { duration, ease: 'power3.out' }),
+    setY: gsap.quickTo(targets, 'y', { duration, ease: 'power3.out' }),
+    strengthX,
+    strengthY,
+  })
+}
 
 function handlePointerMove(event: PointerEvent) {
-  if (!stage.value || !moveX || !moveY) return
+  if (!stage.value || !parallaxLayers.length || window.innerWidth < 768) return
 
   const bounds = stage.value.getBoundingClientRect()
-  const x = (event.clientX - bounds.left) / bounds.width - 0.5
-  const y = (event.clientY - bounds.top) / bounds.height - 0.5
+  const x = ((event.clientX - bounds.left) / bounds.width - 0.5) * 2
+  const y = ((event.clientY - bounds.top) / bounds.height - 0.5) * 2
 
-  moveX(x * 10)
-  moveY(y * 8)
+  parallaxLayers.forEach((layer) => {
+    layer.setX(x * layer.strengthX)
+    layer.setY(y * layer.strengthY)
+  })
 }
 
 function resetParallax() {
-  moveX?.(0)
-  moveY?.(0)
+  parallaxLayers.forEach((layer) => {
+    layer.setX(0)
+    layer.setY(0)
+  })
 }
 
 onMounted(() => {
   const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
-  const hasFinePointer = window.matchMedia('(hover: hover) and (pointer: fine)').matches
+  const hasFinePointer = window.matchMedia(
+    '(min-width: 768px) and (hover: hover) and (pointer: fine)',
+  ).matches
 
   if (!reducedMotion && stage.value && composition.value) {
     animationContext = gsap.context(() => {
@@ -73,23 +108,27 @@ onMounted(() => {
     }, stage.value)
   }
 
-  if (!reducedMotion && hasFinePointer && composition.value) {
-    moveX = gsap.quickTo(composition.value, 'x', {
-      duration: 0.8,
-      ease: 'power3.out',
-    })
-    moveY = gsap.quickTo(composition.value, 'y', {
-      duration: 0.8,
-      ease: 'power3.out',
-    })
-    stage.value?.addEventListener('pointermove', handlePointerMove)
-    stage.value?.addEventListener('pointerleave', resetParallax)
+  if (!reducedMotion && hasFinePointer && stage.value) {
+    registerParallaxLayer('.plant-sun, .paper-contour, .pixel-far-layer', 2.2, 1.4, 1.35)
+    registerParallaxLayer('.pixel-cloud-layer', 3.4, 2, 1.2)
+    registerParallaxLayer(
+      '.plant-stems, .plant-base, .pixel-cottage, .pixel-windmill, .pixel-growth-sequence',
+      4.7,
+      3.1,
+      1.05,
+    )
+    registerParallaxLayer('.plant-leaf, .plant-label, .plant-caption, .pixel-garden-sign', 6.2, 4.1, 0.9)
+    stage.value.addEventListener('pointermove', handlePointerMove, { passive: true })
+    stage.value.addEventListener('pointerleave', resetParallax)
   }
 })
 
 onBeforeUnmount(() => {
   stage.value?.removeEventListener('pointermove', handlePointerMove)
   stage.value?.removeEventListener('pointerleave', resetParallax)
+  gsap.killTweensOf(parallaxTargets)
+  parallaxLayers.length = 0
+  parallaxTargets.length = 0
   animationContext?.revert()
 })
 </script>
@@ -175,5 +214,7 @@ onBeforeUnmount(() => {
         <text x="398" y="460">a work in progress</text>
       </g>
     </svg>
+
+    <PixelFarmScene />
   </div>
 </template>

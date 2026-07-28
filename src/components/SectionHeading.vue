@@ -14,7 +14,11 @@ withDefaults(
 </script>
 
 <template>
-  <header class="section-heading" :class="{ 'section-heading-centered': centered }">
+  <header
+    class="section-heading"
+    :class="{ 'section-heading-centered': centered }"
+    data-garden-reveal
+  >
     <p class="section-eyebrow">
       <span class="eyebrow-leaf" aria-hidden="true"></span>
       {{ eyebrow }}

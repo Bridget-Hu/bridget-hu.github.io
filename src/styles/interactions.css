@@ -1,0 +1,1003 @@
+/* Interaction layer: kept separate from the core visual system for easier tuning. */
+.cursor-trail {
+  position: fixed;
+  z-index: 90;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  contain: strict;
+}
+
+/* Progressive scroll reveals. Content remains visible when JavaScript or motion is off. */
+html.garden-motion [data-garden-reveal]:not(.project-card):not(.interest-note) {
+  opacity: 0;
+  filter: blur(3px);
+  transform: translateY(22px) scale(0.988);
+  transition:
+    opacity 720ms cubic-bezier(0.2, 0.7, 0.2, 1),
+    filter 720ms cubic-bezier(0.2, 0.7, 0.2, 1),
+    transform 720ms cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+html.garden-motion [data-garden-reveal].garden-reveal-visible:not(.project-card):not(.interest-note) {
+  opacity: 1;
+  filter: none;
+  transform: translateY(0) scale(1);
+}
+
+html.garden-motion .interest-note[data-garden-reveal] {
+  opacity: 0;
+  filter: blur(3px);
+  transition:
+    opacity 720ms cubic-bezier(0.2, 0.7, 0.2, 1),
+    filter 720ms cubic-bezier(0.2, 0.7, 0.2, 1),
+    border-color 180ms ease,
+    transform 180ms ease;
+}
+
+html.garden-motion .interest-note[data-garden-reveal].garden-reveal-visible {
+  opacity: 1;
+  filter: none;
+}
+
+.growth-step:nth-child(2),
+.interest-note:nth-child(2) {
+  transition-delay: 90ms !important;
+}
+
+.growth-step:nth-child(3),
+.interest-note:nth-child(3) {
+  transition-delay: 180ms !important;
+}
+
+.interest-note:nth-child(4) {
+  transition-delay: 270ms !important;
+}
+
+/* Pointer-aware project depth and a quiet paper-like highlight. */
+.project-card {
+  --card-glow-opacity: 0;
+  --card-glow-x: 50%;
+  --card-glow-y: 45%;
+  --card-lift: 0px;
+  --card-reveal-y: 0px;
+  --card-rotate-x: 0deg;
+  --card-rotate-y: 0deg;
+  isolation: isolate;
+  transform: perspective(1200px)
+    translateY(calc(var(--card-lift) + var(--card-reveal-y)))
+    rotateX(var(--card-rotate-x))
+    rotateY(var(--card-rotate-y));
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+
+.project-card::before {
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+  border-radius: inherit;
+  content: "";
+  opacity: var(--card-glow-opacity);
+  pointer-events: none;
+  background: radial-gradient(
+    circle 300px at var(--card-glow-x) var(--card-glow-y),
+    color-mix(in srgb, var(--project-accent) 17%, white),
+    transparent 72%
+  );
+  mix-blend-mode: multiply;
+  transition: opacity 220ms ease;
+}
+
+.project-card > * {
+  position: relative;
+  z-index: 1;
+}
+
+.project-card .project-visual {
+  transform: translateZ(13px);
+}
+
+.project-card .project-copy,
+.project-card .project-card-header {
+  transform: translateZ(7px);
+}
+
+.project-card:hover,
+.project-card:focus-visible {
+  --card-glow-opacity: 0.78;
+  --card-lift: -5px;
+  transform: perspective(1200px)
+    translateY(calc(var(--card-lift) + var(--card-reveal-y)))
+    rotateX(var(--card-rotate-x))
+    rotateY(var(--card-rotate-y));
+}
+
+html.garden-motion .project-card[data-garden-reveal] {
+  --card-reveal-y: 25px;
+  opacity: 0;
+  filter: blur(3px);
+  transition:
+    opacity 720ms cubic-bezier(0.2, 0.7, 0.2, 1),
+    filter 720ms cubic-bezier(0.2, 0.7, 0.2, 1),
+    transform 260ms ease,
+    border-color 200ms ease,
+    box-shadow 200ms ease;
+}
+
+html.garden-motion .project-card[data-garden-reveal].garden-reveal-visible {
+  --card-reveal-y: 0px;
+  opacity: 1;
+  filter: none;
+}
+
+html.garden-motion .project-card:nth-child(2) {
+  transition-delay: 85ms;
+}
+
+html.garden-motion .project-card:nth-child(3) {
+  transition-delay: 145ms;
+}
+
+html.garden-motion .project-card:nth-child(4) {
+  transition-delay: 205ms;
+}
+
+/* Original pixel farm vignette layered beside the existing botanical hero. */
+.pixel-farm-card {
+  position: absolute;
+  z-index: 4;
+  right: -7%;
+  bottom: 4%;
+  width: 220px;
+  padding: 6px;
+  margin: 0;
+  overflow: hidden;
+  border: 1px solid rgba(63, 89, 69, 0.26);
+  border-radius: 5px;
+  color: var(--forest);
+  background: #fffaf0;
+  box-shadow:
+    0 17px 34px rgba(63, 89, 69, 0.16),
+    0 3px 0 rgba(63, 89, 69, 0.06);
+  image-rendering: pixelated;
+  transform: rotate(1.4deg);
+  transition:
+    box-shadow 260ms ease,
+    transform 260ms ease;
+}
+
+.pixel-farm-card::before {
+  position: absolute;
+  z-index: 2;
+  top: -5px;
+  left: 50%;
+  width: 50px;
+  height: 13px;
+  content: "";
+  background: rgba(223, 207, 168, 0.74);
+  transform: translateX(-50%) rotate(-1deg);
+}
+
+.pixel-farm-card:hover {
+  box-shadow:
+    0 23px 40px rgba(63, 89, 69, 0.19),
+    0 4px 0 rgba(63, 89, 69, 0.07);
+  transform: translateY(-6px) rotate(0.5deg);
+}
+
+.pixel-farm-card-header {
+  display: flex;
+  min-height: 26px;
+  padding: 3px 4px 2px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+  font-family:
+    Consolas, "SFMono-Regular", "Courier New", monospace;
+  font-size: 7px;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.pixel-farm-card-header span {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.pixel-farm-card-header span:last-child {
+  color: #96704e;
+}
+
+.pixel-farm-card-header i {
+  width: 6px;
+  height: 6px;
+  background: #d3ad61;
+  box-shadow: 0 -2px #d3ad61;
+}
+
+.pixel-farm-scene {
+  width: 100%;
+  border: 1px solid rgba(63, 89, 69, 0.22);
+  background: #b9d0bd;
+}
+
+.pixel-farm-card figcaption {
+  padding: 4px 3px 1px;
+  color: rgba(63, 89, 69, 0.65);
+  font-family: var(--serif);
+  font-size: 8px;
+  font-style: italic;
+  text-align: right;
+}
+
+.pixel-sky {
+  fill: #bad1c0;
+}
+
+.pixel-sun,
+.pixel-sun-ray {
+  fill: #e5c272;
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+.pixel-cloud {
+  fill: #f5f0df;
+  opacity: 0.88;
+}
+
+.hill-back {
+  fill: #8faa80;
+}
+
+.hill-front {
+  fill: #718e68;
+}
+
+.cottage-wall {
+  fill: #e5c89d;
+}
+
+.cottage-roof {
+  fill: #9a6550;
+}
+
+.cottage-roof-light {
+  fill: #b8795c;
+}
+
+.cottage-door {
+  fill: #6e765f;
+}
+
+.cottage-door-light {
+  fill: #879077;
+}
+
+.cottage-knob,
+.pixel-sun {
+  fill: #e1bb67;
+}
+
+.cottage-window {
+  fill: #e3c774;
+  stroke: #f5e5aa;
+  stroke-width: 2px;
+}
+
+.cottage-window-line {
+  fill: none;
+  stroke: #8b6c53;
+  stroke-width: 1.5px;
+}
+
+.cottage-chimney {
+  fill: #795a4a;
+}
+
+.pixel-smoke {
+  fill: #e9e5d8;
+  opacity: 0.75;
+}
+
+.pixel-grass {
+  fill: #769267;
+}
+
+.pixel-path {
+  fill: #d1b88d;
+}
+
+.pixel-soil {
+  fill: #a97858;
+}
+
+.pixel-field-row {
+  fill: #835a43;
+}
+
+.crop-stem {
+  fill: #52734d;
+}
+
+.crop-leaf {
+  fill: #80a067;
+}
+
+.crop-leaf-right {
+  fill: #93ad74;
+}
+
+.sign-post {
+  fill: #73513c;
+}
+
+.sign-board {
+  fill: #d7b274;
+  stroke: #73513c;
+  stroke-width: 2px;
+}
+
+.pixel-garden-sign text {
+  fill: #4c5f42;
+  font-family:
+    Consolas, "Courier New", monospace;
+  font-size: 8px;
+  font-weight: 900;
+}
+
+.pixel-fence {
+  fill: #dbc294;
+}
+
+.cloud-one {
+  animation: pixel-cloud-drift 8s steps(4, end) infinite alternate;
+}
+
+.cloud-two {
+  animation: pixel-cloud-drift 11s steps(5, end) -3s infinite alternate-reverse;
+}
+
+.pixel-smoke {
+  animation: pixel-smoke-rise 3.6s steps(4, end) infinite;
+}
+
+.pixel-farm-card:hover .pixel-sun,
+.pixel-farm-card:hover .pixel-sun-ray {
+  animation: pixel-sun-warmth 1.2s steps(2, end) infinite alternate;
+}
+
+.pixel-farm-card:hover .pixel-crop {
+  animation: pixel-crop-wave 760ms steps(3, end) infinite alternate;
+  transform-box: fill-box;
+  transform-origin: bottom;
+}
+
+.pixel-farm-card:hover .crop-two {
+  animation-delay: 120ms;
+}
+
+.pixel-farm-card:hover .crop-three {
+  animation-delay: 220ms;
+}
+
+.pixel-farm-card:hover .crop-four {
+  animation-delay: 320ms;
+}
+
+/* Hero farm motion and its tiny, accessible chick easter egg. */
+.pixel-sun-particles {
+  fill: #f2d698;
+}
+
+.sun-speck {
+  animation: pixel-sun-speck 2.8s steps(2, end) infinite alternate;
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+.speck-two {
+  animation-delay: -0.8s;
+}
+
+.speck-three {
+  animation-delay: -1.6s;
+}
+
+.speck-four {
+  animation-delay: -2.2s;
+}
+
+.windmill-tower {
+  fill: #d3b47f;
+  stroke: #795d45;
+  stroke-width: 2px;
+}
+
+.windmill-door {
+  fill: #87674d;
+}
+
+.pixel-windmill-blades {
+  fill: #ead7ac;
+  stroke: #806149;
+  stroke-width: 1.5px;
+  animation: pixel-windmill-turn 13s steps(16, end) infinite;
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+.windmill-blade-light {
+  fill: #f3e4c2;
+  stroke: none;
+}
+
+.windmill-hub {
+  fill: #a67450;
+  stroke: #75523d;
+  stroke-width: 1.5px;
+}
+
+.farm-seed {
+  fill: #76503c;
+  animation: farm-seed-settle 820ms steps(3, end) 500ms both;
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+.farm-sprout {
+  animation: farm-sprout-rise 1s steps(3, end) 900ms both;
+  transform-box: fill-box;
+  transform-origin: center bottom;
+}
+
+.farm-growing-plant {
+  animation: farm-pixel-grow 1.5s steps(5, end) 1.15s both;
+  transform-box: fill-box;
+  transform-origin: center bottom;
+}
+
+.growth-stem {
+  fill: #4f704c;
+}
+
+.growth-leaf {
+  fill: #82a06c;
+}
+
+.growth-leaf-right {
+  fill: #97b17c;
+}
+
+.growth-leaf-top {
+  fill: #adc08f;
+}
+
+.hero-pixel-chick {
+  position: absolute;
+  z-index: 5;
+  bottom: 37px;
+  left: 49%;
+  width: 35px;
+  height: 32px;
+  padding: 0;
+  border: 0;
+  color: inherit;
+  background: transparent;
+  cursor: pointer;
+  image-rendering: pixelated;
+  transform: translateX(-50%);
+  animation: hero-chick-step 7.2s steps(4, end) 2.6s infinite;
+}
+
+.hero-pixel-chick span {
+  position: absolute;
+  display: block;
+  pointer-events: none;
+}
+
+.hero-chick-body {
+  right: 2px;
+  bottom: 6px;
+  width: 23px;
+  height: 16px;
+  background: #d9b460;
+  box-shadow:
+    -4px 4px #d9b460,
+    4px 0 #d9b460;
+}
+
+.hero-chick-head {
+  top: 3px;
+  left: 3px;
+  width: 18px;
+  height: 17px;
+  background: #e5c572;
+  box-shadow:
+    4px -3px #e5c572,
+    4px 3px #e5c572;
+}
+
+.hero-chick-eye {
+  top: 8px;
+  left: 15px;
+  width: 3px;
+  height: 3px;
+  background: #3f423b;
+  animation: hero-chick-blink 5.4s steps(1, end) infinite;
+}
+
+.hero-chick-beak {
+  top: 12px;
+  left: 0;
+  width: 5px;
+  height: 4px;
+  background: #b8794f;
+}
+
+.hero-chick-leg {
+  bottom: 0;
+  width: 3px;
+  height: 7px;
+  background: #9f6d48;
+}
+
+.hero-chick-leg-one {
+  left: 16px;
+}
+
+.hero-chick-leg-two {
+  right: 6px;
+}
+
+.hero-pixel-chick:hover {
+  animation-play-state: paused;
+  transform: translateX(-50%) translateY(-3px) scale(1.08) rotate(-2deg);
+}
+
+.hero-pixel-chick:hover .hero-chick-eye {
+  animation-play-state: paused;
+}
+
+.hero-pixel-chick:focus-visible {
+  border-radius: 3px;
+  outline: 2px solid #fffaf0;
+  outline-offset: 3px;
+  box-shadow: 0 0 0 5px rgba(63, 89, 69, 0.56);
+}
+
+.farm-dream-message {
+  position: absolute;
+  z-index: 6;
+  right: 8px;
+  bottom: 43px;
+  display: inline-flex;
+  min-height: 25px;
+  padding: 5px 7px;
+  border: 1px solid rgba(63, 89, 69, 0.27);
+  border-radius: 4px;
+  align-items: center;
+  gap: 5px;
+  color: var(--forest);
+  background: rgba(255, 250, 240, 0.96);
+  box-shadow: 0 7px 16px rgba(63, 89, 69, 0.14);
+  font-family: var(--serif);
+  font-size: 8px;
+  font-style: italic;
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+.farm-dream-message b {
+  color: #b96f60;
+  font-family: Georgia, serif;
+  font-size: 10px;
+  font-style: normal;
+}
+
+.farm-dream-enter-active,
+.farm-dream-leave-active {
+  transition:
+    opacity 180ms ease,
+    transform 180ms ease;
+}
+
+.farm-dream-enter-from,
+.farm-dream-leave-to {
+  opacity: 0;
+  transform: translateY(4px) scale(0.96);
+}
+
+@keyframes pixel-sun-speck {
+  from {
+    opacity: 0.22;
+    transform: scale(0.75);
+  }
+
+  to {
+    opacity: 0.85;
+    transform: scale(1.2);
+  }
+}
+
+@keyframes pixel-windmill-turn {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes farm-seed-settle {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes farm-sprout-rise {
+  from {
+    opacity: 0;
+    transform: scaleY(0);
+  }
+
+  to {
+    opacity: 1;
+    transform: scaleY(1);
+  }
+}
+
+@keyframes farm-pixel-grow {
+  from {
+    opacity: 0;
+    transform: scaleY(0.08);
+  }
+
+  to {
+    opacity: 1;
+    transform: scaleY(1);
+  }
+}
+
+@keyframes hero-chick-step {
+  0%,
+  72%,
+  100% {
+    transform: translateX(-50%);
+  }
+
+  79% {
+    transform: translateX(calc(-50% + 4px)) translateY(-2px);
+  }
+
+  86% {
+    transform: translateX(calc(-50% + 8px));
+  }
+
+  93% {
+    transform: translateX(calc(-50% + 4px)) translateY(-1px);
+  }
+}
+
+@keyframes hero-chick-blink {
+  0%,
+  88%,
+  92%,
+  100% {
+    transform: scaleY(1);
+  }
+
+  89%,
+  91% {
+    transform: scaleY(0.2);
+  }
+}
+/* A small crop row makes the farm interest feel personal without borrowed game assets. */
+.interest-farm {
+  padding-bottom: 77px;
+}
+
+.pixel-crop-row {
+  position: absolute;
+  right: 22px;
+  bottom: 18px;
+  left: 22px;
+  display: flex;
+  height: 39px;
+  align-items: end;
+  justify-content: space-around;
+  overflow: hidden;
+  image-rendering: pixelated;
+}
+
+.pixel-soil-strip {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  height: 10px;
+  background: #a97957;
+  box-shadow:
+    inset 0 4px #c09a70,
+    0 -3px #82936d;
+}
+
+.pixel-crop-row i {
+  position: relative;
+  z-index: 1;
+  width: 14px;
+  height: 29px;
+  transform-origin: bottom;
+}
+
+.pixel-crop-row i::before {
+  position: absolute;
+  bottom: 5px;
+  left: 6px;
+  width: 3px;
+  height: 20px;
+  content: "";
+  background: #5f7b55;
+}
+
+.pixel-crop-row i::after,
+.pixel-crop-row i b {
+  position: absolute;
+  width: 8px;
+  height: 5px;
+  content: "";
+  background: #8da777;
+}
+
+.pixel-crop-row i::after {
+  bottom: 13px;
+  left: 0;
+}
+
+.pixel-crop-row i b {
+  right: 0;
+  bottom: 19px;
+  background: #9db484;
+}
+
+.interest-farm:hover .pixel-crop-row i {
+  animation: note-crop-wave 650ms steps(2, end) infinite alternate;
+}
+
+.interest-farm:hover .pixel-crop-row i:nth-of-type(2) {
+  animation-delay: 90ms;
+}
+
+.interest-farm:hover .pixel-crop-row i:nth-of-type(3) {
+  animation-delay: 180ms;
+}
+
+.interest-farm:hover .pixel-crop-row i:nth-of-type(4) {
+  animation-delay: 270ms;
+}
+
+.interest-farm:hover .pixel-crop-row i:nth-of-type(5) {
+  animation-delay: 360ms;
+}
+
+/* A restrained warm glint gives primary actions a little more life. */
+.button {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.button::before {
+  position: absolute;
+  z-index: -1;
+  top: -30%;
+  bottom: -30%;
+  left: -45%;
+  width: 28%;
+  content: "";
+  pointer-events: none;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 250, 226, 0.28),
+    transparent
+  );
+  transform: skewX(-18deg);
+  transition: left 520ms ease;
+}
+
+.button:hover::before {
+  left: 125%;
+}
+
+.pixel-chick {
+  animation: chick-idle 4.8s steps(2, end) infinite;
+}
+
+@keyframes pixel-cloud-drift {
+  to {
+    transform: translateX(6px);
+  }
+}
+
+@keyframes pixel-smoke-rise {
+  0%,
+  20% {
+    opacity: 0.36;
+    transform: translateY(2px);
+  }
+
+  80%,
+  100% {
+    opacity: 0.76;
+    transform: translateY(-3px);
+  }
+}
+
+@keyframes pixel-sun-warmth {
+  to {
+    filter: saturate(1.12);
+    transform: scale(1.08);
+  }
+}
+
+@keyframes pixel-crop-wave {
+  to {
+    transform: rotate(4deg) translateY(-1px);
+  }
+}
+
+@keyframes note-crop-wave {
+  to {
+    transform: translateY(-3px) rotate(3deg);
+  }
+}
+
+@keyframes chick-idle {
+  0%,
+  82%,
+  100% {
+    transform: translateY(0);
+  }
+
+  88%,
+  94% {
+    transform: translateY(-3px);
+  }
+}
+
+@media (max-width: 1100px) {
+  .pixel-farm-card {
+    right: -1%;
+    width: 198px;
+  }
+}
+
+@media (max-width: 899px) {
+  .pixel-farm-card {
+    right: 5%;
+    bottom: 5%;
+    width: 210px;
+  }
+}
+
+@media (max-width: 767px) {
+  .pixel-farm-card {
+    right: 0;
+    width: 180px;
+  }
+
+  .pixel-farm-card-header {
+    font-size: 6px;
+  }
+}
+
+@media (max-width: 520px) {
+  .pixel-farm-card {
+    right: -2px;
+    bottom: 2%;
+    width: 155px;
+    padding: 4px;
+  }
+
+  .pixel-farm-card-header {
+    min-height: 21px;
+  }
+
+  .pixel-farm-card figcaption {
+    display: none;
+  }
+}
+
+@media (hover: none), (pointer: coarse) {
+  .cursor-trail {
+    display: none !important;
+  }
+
+  .project-card {
+    will-change: auto;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cursor-trail {
+    display: none !important;
+  }
+
+  html.garden-motion [data-garden-reveal],
+  .project-card,
+  .project-card:hover,
+  .project-card:focus-visible,
+  .pixel-farm-card,
+  .pixel-farm-card:hover {
+    opacity: 1;
+    filter: none;
+    transform: none;
+  }
+
+  .cloud-one,
+  .cloud-two,
+  .pixel-smoke,
+  .pixel-farm-card:hover .pixel-sun,
+  .pixel-farm-card:hover .pixel-sun-ray,
+  .pixel-farm-card:hover .pixel-crop,
+  .interest-farm:hover .pixel-crop-row i,
+  .pixel-chick {
+    animation: none !important;
+  }
+}
+/* Keep the Hero farm quieter on smaller and motion-sensitive devices. */
+@media (max-width: 767px) {
+  .pixel-smoke,
+  .cloud-two,
+  .speck-two,
+  .speck-four {
+    display: none;
+  }
+
+  .pixel-windmill-blades {
+    animation-duration: 18s;
+  }
+
+  .hero-pixel-chick {
+    bottom: 31px;
+    animation: none;
+  }
+
+  .farm-dream-message {
+    right: 5px;
+    bottom: 37px;
+    font-size: 7px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sun-speck,
+  .pixel-windmill-blades,
+  .farm-seed,
+  .farm-sprout,
+  .farm-growing-plant,
+  .hero-pixel-chick,
+  .hero-chick-eye {
+    animation: none !important;
+  }
+
+  .farm-seed,
+  .farm-sprout,
+  .farm-growing-plant {
+    opacity: 1;
+    transform: none;
+  }
+
+  .hero-pixel-chick,
+  .hero-pixel-chick:hover {
+    transform: translateX(-50%);
+  }
+}

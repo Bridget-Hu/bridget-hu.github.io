@@ -43,6 +43,7 @@ const growthStages = [
             :key="stage.title"
             class="growth-step"
             :class="`growth-${stage.symbol}`"
+            data-garden-reveal
           >
             <div class="growth-symbol" aria-hidden="true">
               <svg v-if="stage.symbol === 'seed'" viewBox="0 0 70 70">
